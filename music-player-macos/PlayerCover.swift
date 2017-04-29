@@ -13,7 +13,7 @@ class PlayerCover: View {
 
     override init() {
         super.init()
-        layer?.backgroundColor = NSColor.hexStringToNSColor(hex: "#222").cgColor
+        layer?.backgroundColor = NSColor.hexStringToColor(hex: "#222").cgColor
         initViews()
     }
     

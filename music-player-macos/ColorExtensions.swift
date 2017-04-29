@@ -17,11 +17,12 @@
 import Cocoa
 
 extension NSColor {
-    
+    private static let reddishColor = NSColor.hexStringToColor(hex: "#D0011B")
+    static let secondaryColor = NSColor.reddishColor
 }
 
 extension NSColor {
-    public static func hexStringToNSColor (hex: String) -> NSColor {
+    public static func hexStringToColor (hex: String) -> NSColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
         if (cString.hasPrefix("#")) {

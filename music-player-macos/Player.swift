@@ -16,7 +16,7 @@ class Player: View {
     private let coverEl = PlayerCover()
 
     private lazy var playerCoreEl: PlayerCore = {
-        let v = PlayerCore()
+        let v = PlayerCore(onSongStartedPlaying: self.handleSongStartedPlaying, onSongPaused: self.handleSongPaused)
         return v
     }()
     
@@ -46,23 +46,29 @@ class Player: View {
         playBtnEl.topAnchorToEqual(coverEl.bottomAnchor)
         playBtnEl.leftAnchorToEqual(coverEl.leftAnchor)
         
-        NSEvent.addGlobalMonitorForEvents(matching: NSEventMask.keyDown) { event in
-            Swift.print("LUUUUUUUUUUUUUUUUUUUUUL")
-        }
-        
-//        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-//        try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-//        try! AVAudioSession.sharedInstance().setActive(true)
-//        
-//        let remoteCommandCenter = MPRemoteCommandCenter.shared()
-//        remoteCommandCenter.pauseCommand.addTarget(handler: handleRemotePauseCommand)
-//        remoteCommandCenter.playCommand.addTarget(handler: handleRemotePlayCommand)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePlayPauseMediaKey), name: .customPlayPauseMediaKeyPressed, object: nil)
         
         layer?.addSublayer(AVPlayerLayer(player: playerCoreEl))
         playerCoreEl.volume = 0.02
         _ = self.playerCoreEl.updateSong(id: "759")
         self.playerCoreEl.playSong()
+    }
+    
+    // MARK: - Private Methods
+
+    @objc private func handlePlayPauseMediaKey() {
+        if playerCoreEl.isPlaying {
+            playerCoreEl.pauseSong()
+        } else {
+            playerCoreEl.playSong()
+        }
+    }
+    
+    private func handleSongStartedPlaying() {
+        Swift.print("Song started playing")
+    }
+    
+    private func handleSongPaused() {
+        Swift.print("Song paused")
     }
 }

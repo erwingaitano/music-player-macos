@@ -14,24 +14,31 @@ class PlayerCore: AVPlayer {
     
     typealias OnProgress = (_ currentTime: Double, _ duration: Double) -> Void
     private var updateSongPromiseConstructor: Promise<Any>.PendingTuple!
-    typealias OnSongFinished = () -> Void
+    private(set) var isPlaying = false
+    typealias EmptyCallback = () -> Void
     
     // MARK: - Properties
     
     private var onProgress: OnProgress?
     private var progressTimer: Timer?
-    private var onSongFinished: OnSongFinished?
+    private var onSongStartedPlaying: EmptyCallback?
+    private var onSongPaused: EmptyCallback?
+    private var onSongFinished: EmptyCallback?
     private var songJustStartedObserver: Any!
     
     // MARK: - Inits
     
-    init(onProgress: OnProgress? = nil, onSongFinished: OnSongFinished? = nil) {
+    init(onProgress: OnProgress? = nil, onSongFinished: EmptyCallback? = nil, onSongStartedPlaying: EmptyCallback? = nil, onSongPaused: EmptyCallback? = nil) {
         super.init()
         self.onProgress = onProgress
+        self.onSongStartedPlaying = onSongStartedPlaying
+        self.onSongPaused = onSongPaused
         self.onSongFinished = onSongFinished
         volume = 1
         
         //        player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.5, preferredTimescale: 10), queue: DispatchQueue.main, using: handlePeriodicTime)
+
+        addObserver(self, forKeyPath: "rate", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEndOfSong), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: currentItem)
         
         // NOTE: This observer is not triggered when outside the app, you you need to use
@@ -52,11 +59,24 @@ class PlayerCore: AVPlayer {
     // MARK: - Private Methods
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        //        if keyPath == "status" && (object as? AVPlayerItem) == player.currentItem {
-        //            if player.status == .readyToPlay {
-        //                updateSongPromiseConstructor.fulfill(true)
-        //            }
-        //        }
+        if keyPath == "rate" {
+            if (rate == 0.0) {
+                // Playback stopped
+                if (CMTimeGetSeconds(self.currentTime()) >= CMTimeGetSeconds(self.currentItem!.duration)) {
+                    // Playback reached end
+                } else if (!self.currentItem!.isPlaybackLikelyToKeepUp) {
+                    // Not ready to play, wait until enough data is loaded
+                } else if (self.error != nil) {
+                    // Playback failed
+                } else {
+                    isPlaying = false
+                    onSongPaused?()
+                }
+            } else {
+                isPlaying = true
+                onSongStartedPlaying?()
+            }
+        }
     }
     
     @objc private func handleSongProgress(_: Timer) {

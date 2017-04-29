@@ -45,6 +45,14 @@ class MainController: NSViewController {
         player.bottomAnchorToEqual(view.bottomAnchor)
         player.rightAnchorToEqual(view.rightAnchor)
         player.widthAnchorToEqual(anchor: view.widthAnchor, multiplier: 0.4)
+        
+        let songsListEl = ListView("ERWIN", onItemSelected: nil, onCloseClick: nil)
+        view.addSubview(songsListEl)
+        songsListEl.topAnchorToEqual(view.topAnchor)
+        songsListEl.bottomAnchorToEqual(view.bottomAnchor)
+//        songsListEl.heightAnchorToEqual(anchor: view.heightAnchor)
+        songsListEl.leftAnchorToEqual(view.leftAnchor)
+        songsListEl.rightAnchorToEqual(player.leftAnchor)
     }
 
     override var representedObject: Any? {

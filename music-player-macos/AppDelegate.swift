@@ -30,6 +30,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         guard let mainWindowContentView = window.contentView else { return }
         let mainController = MainController()
+//        mainWindowContentView.heightAnchorToEqual(height: minHeight)
+//        mainWindowContentView.widthAnchorToEqual(width: minWidth)
+        
+        let a = mainWindowContentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minHeight)
+//        a.priority = 501
+        a.isActive = true
+        
+        mainWindowContentView.contentHuggingPriority(for: NSLayoutConstraintOrientation.vertical).add(400)
         mainWindowContentView.addSubview(mainController.view)
         mainController.view.allEdgeAnchorsToEqual(mainWindowContentView)
     }
