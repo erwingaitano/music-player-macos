@@ -21,12 +21,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.isMovable = true
         window.showsResizeIndicator = true
         window.center()
-        window.styleMask.insert([.closable, .titled, .resizable, .miniaturizable])
-        window.title = "Music Player"
+        window.styleMask.insert([.closable, .titled, .resizable, .miniaturizable, .fullSizeContentView])
+        window.title = ""
+        window.titlebarAppearsTransparent = true
         window.contentMinSize = NSSize(width: minWidth, height: minHeight)
         window.minSize = NSSize(width: minWidth, height: minHeight)
         window.minFullScreenContentSize = NSSize(width: minWidth, height: minHeight)
-        window.titlebarAppearsTransparent = false
         window.center()
         window.makeKeyAndOrderFront(nil)
         

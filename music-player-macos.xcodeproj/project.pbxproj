@@ -28,6 +28,7 @@
 		AA6D14AE1EB42CA0005DBC83 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6D14AD1EB42CA0005DBC83 /* ListView.swift */; };
 		AA6D14B01EB42D20005DBC83 /* MediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6D14AF1EB42D20005DBC83 /* MediaCell.swift */; };
 		AA9672701EB50B36008CE884 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA96726F1EB50B36008CE884 /* Label.swift */; };
+		AA9672721EB57C7C008CE884 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9672711EB57C7C008CE884 /* Button.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		AA6D14AD1EB42CA0005DBC83 /* ListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		AA6D14AF1EB42D20005DBC83 /* MediaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCell.swift; sourceTree = "<group>"; };
 		AA96726F1EB50B36008CE884 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		AA9672711EB57C7C008CE884 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		BDAE1AD68CC44741F47E4DB6 /* Pods-music-player-macos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music-player-macos.debug.xcconfig"; path = "Pods/Target Support Files/Pods-music-player-macos/Pods-music-player-macos.debug.xcconfig"; sourceTree = "<group>"; };
 		C2A76408B6F3800C4B6A0559 /* Pods-music-player-macos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music-player-macos.release.xcconfig"; path = "Pods/Target Support Files/Pods-music-player-macos/Pods-music-player-macos.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 				AA6D14AD1EB42CA0005DBC83 /* ListView.swift */,
 				AA6D14AF1EB42D20005DBC83 /* MediaCell.swift */,
 				AA96726F1EB50B36008CE884 /* Label.swift */,
+				AA9672711EB57C7C008CE884 /* Button.swift */,
 			);
 			name = _components;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				AA6D147F1EB415EE005DBC83 /* AppDelegate.swift in Sources */,
 				AA6D149B1EB4175F005DBC83 /* GeneralHelpers.swift in Sources */,
 				AA6D14B01EB42D20005DBC83 /* MediaCell.swift in Sources */,
+				AA9672721EB57C7C008CE884 /* Button.swift in Sources */,
 				AA6D149D1EB4175F005DBC83 /* MediaApplication.swift in Sources */,
 				AA6D14A11EB41760005DBC83 /* PlaylistModel.swift in Sources */,
 				AA6D14991EB4175F005DBC83 /* AppSingleton.swift in Sources */,

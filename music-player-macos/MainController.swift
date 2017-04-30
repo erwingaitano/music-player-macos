@@ -13,6 +13,8 @@ class MainController: NSViewController {
 
     private var listViewEl: ListView!
     private var playingListViewEl: ListView!
+    private var listViewType: String!
+    private var playerEl: Player!
     private var songsUpdatedObserver: NSObjectProtocol!
     
     private lazy var sidebarEl: View = {
@@ -68,7 +70,7 @@ class MainController: NSViewController {
         title.font = NSFont.systemFont(ofSize: 18)
         title.textColor = .blue
         
-        let playerEl = Player()
+        playerEl = Player()
         view.addSubview(playerEl)
         playerEl.heightAnchorToEqual(height: 100)
         playerEl.topAnchorToEqual(view.topAnchor)
@@ -81,19 +83,35 @@ class MainController: NSViewController {
         sidebarEl.leftAnchorToEqual(view.leftAnchor)
         sidebarEl.widthAnchorToEqual(width: 200)
         
-        playingListViewEl = ListView("Playing", onItemSelected: nil, onCloseClick: nil)
+        playingListViewEl = ListView("Playing", onItemSelected: nil)
         view.addSubview(playingListViewEl)
         playingListViewEl.topAnchorToEqual(playerEl.bottomAnchor)
         playingListViewEl.bottomAnchorToEqual(view.bottomAnchor)
         playingListViewEl.widthAnchorToEqual(width: 300)
         playingListViewEl.rightAnchorToEqual(view.rightAnchor)
         
-        listViewEl = ListView("...", onItemSelected: nil, onCloseClick: nil)
+        listViewEl = ListView("...", onItemSelected: handleItemSelected)
         view.addSubview(listViewEl)
         listViewEl.topAnchorToEqual(playerEl.bottomAnchor)
         listViewEl.bottomAnchorToEqual(view.bottomAnchor)
         listViewEl.leftAnchorToEqual(sidebarEl.rightAnchor)
         listViewEl.rightAnchorToEqual(playingListViewEl.leftAnchor)
+        
+        let playerElSeparatorEl = View()
+        view.addSubview(playerElSeparatorEl)
+        playerElSeparatorEl.layer?.backgroundColor = NSColor.white.cgColor
+        playerElSeparatorEl.heightAnchorToEqual(height: 1)
+        playerElSeparatorEl.topAnchorToEqual(playerEl.bottomAnchor)
+        playerElSeparatorEl.leftAnchorToEqual(playerEl.leftAnchor)
+        playerElSeparatorEl.rightAnchorToEqual(playerEl.rightAnchor)
+        
+        let playingListElSeparatorEl = View()
+        view.addSubview(playingListElSeparatorEl)
+        playingListElSeparatorEl.layer?.backgroundColor = NSColor.white.cgColor
+        playingListElSeparatorEl.widthAnchorToEqual(width: 1)
+        playingListElSeparatorEl.topAnchorToEqual(playingListViewEl.topAnchor)
+        playingListElSeparatorEl.bottomAnchorToEqual(playingListViewEl.bottomAnchor)
+        playingListElSeparatorEl.leftAnchorToEqual(playingListViewEl.leftAnchor)
     }
     
     // MARK: - Life Cycles
@@ -102,14 +120,16 @@ class MainController: NSViewController {
         self.view = View()
     }
     
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
+    // MARK: - Private Methods
+
+    private func handleItemSelected(item: MediaCell.Data) {
+        if listViewType == "songs" {
+            let song = AppSingleton.shared.songs.first(where: { $0.id == item.id })!
+            playerEl.updateSong(song)
+            playerEl.play()
         }
     }
     
-    // MARK: - Private Methods
-
     private func handleSongsUpdated(_: Notification) {
         updateSongs()
     }
@@ -122,10 +142,12 @@ class MainController: NSViewController {
     @objc private func showAllPlaylists() {
         listViewEl.updateData(ListView.getMediaCellDataArrayFromPlaylistModelArray(AppSingleton.shared.playlists))
         listViewEl.updateTitle("All Playlists")
+        listViewType = "playlists"
     }
     
     @objc private func showAllSongs() {
         listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songs))
         listViewEl.updateTitle("All Songs")
+        listViewType = "songs"
     }
 }

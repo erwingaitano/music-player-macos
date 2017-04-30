@@ -18,7 +18,6 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     
     private let cellId = "cellId"
     private var onItemSelected: OnItemSelected?
-    private var onCloseClick: EmptyCallback?
     private var data: [MediaCell.Data] = []
     private var scrollForTableEl: NSScrollView = {
         let v = NSScrollView()
@@ -52,15 +51,14 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     
     // MARK: - Inits
     
-    init(_ title: String, onItemSelected: OnItemSelected?, onCloseClick: EmptyCallback?) {
+    init(_ title: String, onItemSelected: OnItemSelected?) {
         super.init(frame: .zero)
         self.onItemSelected = onItemSelected
-        self.onCloseClick = onCloseClick
         self.titleEl.stringValue = title
         tableEl.delegate = self
         tableEl.dataSource = self
         tableEl.doubleAction = #selector(handleDoubleClick)
-        tableEl.action = #selector(handleDoubleClick)
+//        tableEl.action = #selector(handleDoubleClick)
         scrollForTableEl.documentView = tableEl
         
         layer?.backgroundColor = NSColor.black.cgColor
@@ -82,12 +80,8 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     
     // MARK: - Private Methods
     
-    @objc private func handleCloseClick() {
-        onCloseClick?()
-    }
-    
     @objc private func handleDoubleClick() {
-        
+        onItemSelected?(data[tableEl.selectedRow])
     }
     
     // MARK: - API Methods
