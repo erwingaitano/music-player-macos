@@ -25,11 +25,17 @@ class Player: View {
     override init() {
         super.init()
         layer?.backgroundColor = NSColor.red.cgColor
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePlayPauseMediaKey), name: .customPlayPauseMediaKeyPressed, object: nil)
+        
         initViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func initViews() {
@@ -41,17 +47,23 @@ class Player: View {
         coverEl.centerXAnchorToEqual(centerXAnchor)
         
         let playBtnEl = NSButton()
-        playBtnEl.title = "Play"
+        playBtnEl.wantsLayer = true
+        playBtnEl.layer?.backgroundColor = CGColor.clear
+        playBtnEl.alternateImage = #imageLiteral(resourceName: "icon - play")
+        playBtnEl.setButtonType(NSButtonType.momentaryChange)
+        playBtnEl.isBordered = false
+        playBtnEl.imageScaling = .scaleProportionallyDown
+        playBtnEl.image = #imageLiteral(resourceName: "icon - play")
         addSubview(playBtnEl)
+        playBtnEl.widthAnchorToEqual(width: 80)
+        playBtnEl.heightAnchorToEqual(height: 80)
         playBtnEl.topAnchorToEqual(coverEl.bottomAnchor)
         playBtnEl.leftAnchorToEqual(coverEl.leftAnchor)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePlayPauseMediaKey), name: .customPlayPauseMediaKeyPressed, object: nil)
-        
         layer?.addSublayer(AVPlayerLayer(player: playerCoreEl))
-        playerCoreEl.volume = 0.02
+        playerCoreEl.volume = 0.05
         _ = self.playerCoreEl.updateSong(id: "759")
-        self.playerCoreEl.playSong()
+//        self.playerCoreEl.playSong()
     }
     
     // MARK: - Private Methods

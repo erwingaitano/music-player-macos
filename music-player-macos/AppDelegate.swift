@@ -23,23 +23,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.center()
         window.styleMask.insert([.closable, .titled, .resizable, .miniaturizable])
         window.title = "Music Player"
+        window.contentMinSize = NSSize(width: minWidth, height: minHeight)
         window.minSize = NSSize(width: minWidth, height: minHeight)
+        window.minFullScreenContentSize = NSSize(width: minWidth, height: minHeight)
         window.titlebarAppearsTransparent = false
         window.center()
         window.makeKeyAndOrderFront(nil)
         
         guard let mainWindowContentView = window.contentView else { return }
         let mainController = MainController()
-//        mainWindowContentView.heightAnchorToEqual(height: minHeight)
-//        mainWindowContentView.widthAnchorToEqual(width: minWidth)
-        
-        let a = mainWindowContentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minHeight)
-//        a.priority = 501
-        a.isActive = true
-        
-        mainWindowContentView.contentHuggingPriority(for: NSLayoutConstraintOrientation.vertical).add(400)
         mainWindowContentView.addSubview(mainController.view)
         mainController.view.allEdgeAnchorsToEqual(mainWindowContentView)
+
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

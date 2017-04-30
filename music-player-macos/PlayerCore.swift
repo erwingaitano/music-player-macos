@@ -84,7 +84,7 @@ class PlayerCore: AVPlayer {
         let duration = CMTimeGetSeconds(currentItem.duration)
         let currentTime = CMTimeGetSeconds(currentItem.currentTime())
         onProgress?(currentTime, duration)
-        Swift.print(status == .readyToPlay, duration)
+//        Swift.print(status == .readyToPlay, duration)
         if status == .readyToPlay {
             updateSongPromiseConstructor.fulfill(true)
         }

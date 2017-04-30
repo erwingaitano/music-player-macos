@@ -9,7 +9,7 @@
 import Cocoa
 import Kingfisher
 
-class MediaCell: NSTableRowView {
+class MediaCell: View {
     // MARK: - Structs
     
     struct Data {
@@ -31,31 +31,45 @@ class MediaCell: NSTableRowView {
     
     private var containerEl: View = {
         let v = View()
-        v.layer?.backgroundColor = NSColor.black.cgColor
         return v
     }()
     
     private var imageEl: NSImageView = {
         let v = NSImageView()
-//        v.contentMode = .scaleAspectFill
-//        v.clipsToBounds = true
+        v.wantsLayer = true
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#D8D8D8").cgColor
         return v
     }()
     
-    private var titleEl: NSTextField = {
-        let v = NSTextField()
-        v.textColor = .white
-        v.font = NSFont.systemFont(ofSize: 15)
+    private var titleEl: Label = {
+        let v = Label()
+        v.font = NSFont.systemFont(ofSize: 14)
         v.stringValue = "..."
         return v
     }()
     
-    private var subtitleEl: NSTextField = {
-        let v = NSTextField()
+    private var subtitleEl: Label = {
+        let v = Label()
         v.textColor = .secondaryColor
-        v.font = NSFont.systemFont(ofSize: 14)
+        v.font = NSFont.systemFont(ofSize: 13)
         v.stringValue = "..."
+        return v
+    }()
+    
+    private lazy var contentEl: View = {
+        let v = View()
+        v.addSubview(self.titleEl)
+        self.titleEl.heightAnchorToEqual(height: 18)
+        self.titleEl.topAnchorToEqual(v.topAnchor)
+        self.titleEl.leftAnchorToEqual(v.leftAnchor)
+        
+        v.addSubview(self.subtitleEl)
+        self.subtitleEl.heightAnchorToEqual(height: 18)
+        self.subtitleEl.topAnchorToEqual(self.titleEl.bottomAnchor, constant: 4)
+        self.subtitleEl.leftAnchorToEqual(v.leftAnchor)
+        
+        v.bottomAnchorToEqual(self.subtitleEl.bottomAnchor)
+        
         return v
     }()
     
@@ -68,8 +82,8 @@ class MediaCell: NSTableRowView {
     
     // MARK: - Inits
     
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
+    override init() {
+        super.init()
         initViews()
     }
     
@@ -79,7 +93,7 @@ class MediaCell: NSTableRowView {
     
     private func initViews() {
         addSubview(containerEl)
-        allEdgeAnchorsToEqual(self)
+        containerEl.allEdgeAnchorsToEqual(self)
         
         addSubview(separatorEl)
         separatorEl.bottomAnchorToEqual(containerEl.bottomAnchor)
@@ -87,20 +101,15 @@ class MediaCell: NSTableRowView {
         separatorEl.rightAnchorToEqual(containerEl.rightAnchor)
         
         addSubview(imageEl)
-        imageEl.widthAnchorToEqual(width: 42)
-        imageEl.heightAnchorToEqual(height: 42)
-        imageEl.centerYAnchorToEqual(containerEl.centerYAnchor)
+        imageEl.topAnchorToEqual(containerEl.topAnchor, constant: 8)
+        imageEl.bottomAnchorToEqual(containerEl.bottomAnchor, constant: -8)
+        imageEl.widthAnchorToEqual(anchor: imageEl.heightAnchor)
         imageEl.leftAnchorToEqual(containerEl.leftAnchor, constant: 8)
         
-        addSubview(titleEl)
-        titleEl.heightAnchorToEqual(height: 18)
-        titleEl.topAnchorToEqual(imageEl.topAnchor, constant: 4)
-        titleEl.leftAnchorToEqual(imageEl.rightAnchor, constant: 8)
-        
-        addSubview(subtitleEl)
-        subtitleEl.heightAnchorToEqual(height: 18)
-        subtitleEl.topAnchorToEqual(titleEl.bottomAnchor, constant: 4)
-        subtitleEl.leftAnchorToEqual(titleEl.leftAnchor)
+        addSubview(contentEl)
+        contentEl.centerYAnchorToEqual(imageEl.centerYAnchor)
+        contentEl.leftAnchorToEqual(imageEl.rightAnchor, constant: 8)
+        contentEl.rightAnchorToEqual(containerEl.rightAnchor, constant: -8)
     }
     
     // MARK: - Private Methods

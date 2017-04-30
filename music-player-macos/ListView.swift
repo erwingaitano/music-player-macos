@@ -20,25 +20,30 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     private var onItemSelected: OnItemSelected?
     private var onCloseClick: EmptyCallback?
     private var data: [MediaCell.Data] = []
-    
-    private var tableEl: NSTableView = {
-        let v = NSTableView()
-        v.backgroundColor = .black
+    private var scrollForTableEl: NSScrollView = {
+        let v = NSScrollView()
+        v.hasVerticalScroller = true
         return v
     }()
     
-    private lazy var closeBtnEl: NSButton = {
-        let v = NSButton()
-//        v.addTarget(self, action: #selector(self.handleCloseClick), for: .touchUpInside)
-
-        v.image = #imageLiteral(resourceName: "icon - arrowdown")
-        v.widthAnchorToEqual(width: 25)
-        v.heightAnchorToEqual(height: 17)
+    private var tableEl: NSTableView = {
+        let v = NSTableView()
+        let column = NSTableColumn()
+        v.backgroundColor = .black
+        v.addTableColumn(column)
+        v.intercellSpacing = NSSize(width: 0, height: 0)
+        
+        var frame = v.headerView!.frame
+        frame.size.height = 0
+        v.headerView!.frame = frame
         return v
     }()
     
     private var titleEl: NSTextField = {
         let v = NSTextField()
+        v.isEditable = false
+        v.backgroundColor = .clear
+        v.isBordered = false
         v.font = NSFont.boldSystemFont(ofSize: 30)
         v.stringValue = "-"
         v.textColor = .white
@@ -52,25 +57,23 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
         self.onItemSelected = onItemSelected
         self.onCloseClick = onCloseClick
         self.titleEl.stringValue = title
-        layer?.backgroundColor = NSColor.yellow.cgColor
         tableEl.delegate = self
         tableEl.dataSource = self
-//        tableEl.register(MediaCell.self, forIdentifier: cellId)
+        tableEl.doubleAction = #selector(handleDoubleClick)
+        tableEl.action = #selector(handleDoubleClick)
+        scrollForTableEl.documentView = tableEl
+        
         layer?.backgroundColor = NSColor.black.cgColor
         
         addSubview(titleEl)
         titleEl.topAnchorToEqual(topAnchor, constant: 30)
         titleEl.leftAnchorToEqual(leftAnchor, constant: 20)
         
-        addSubview(closeBtnEl)
-        closeBtnEl.centerYAnchorToEqual(titleEl.centerYAnchor)
-        closeBtnEl.rightAnchorToEqual(rightAnchor, constant: -19)
-        
-        addSubview(tableEl)
-        tableEl.topAnchorToEqual(titleEl.bottomAnchor, constant: 20)
-        tableEl.leftAnchorToEqual(leftAnchor)
-        tableEl.rightAnchorToEqual(rightAnchor)
-        tableEl.bottomAnchorToEqual(bottomAnchor)
+        addSubview(scrollForTableEl)
+        scrollForTableEl.topAnchorToEqual(titleEl.bottomAnchor, constant: 20)
+        scrollForTableEl.leftAnchorToEqual(leftAnchor)
+        scrollForTableEl.rightAnchorToEqual(rightAnchor)
+        scrollForTableEl.bottomAnchorToEqual(bottomAnchor)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -83,7 +86,15 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
         onCloseClick?()
     }
     
+    @objc private func handleDoubleClick() {
+        
+    }
+    
     // MARK: - API Methods
+    
+    public func updateTitle(_ title: String) {
+        titleEl.stringValue = title
+    }
     
     public func updateData(_ data: [MediaCell.Data]) {
         self.data = data
@@ -110,23 +121,29 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        return 59
+        return 50
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let v = View()
-        v.layer?.backgroundColor = NSColor.blue.cgColor
-        v.frame = NSMakeRect(0, 0, 30, 30)
+        // TODO: this seems to not be working, it's always entering the if block
+        var v = tableView.make(withIdentifier: "lul", owner: self) as? MediaCell
+        
+        if v == nil {
+            v = MediaCell()
+            v!.identifier = "lul"
+        }
+        
+        v?.data = data[row]
         return v
     }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        if let table = notification.object as? NSTableView {
+            let selected = table.selectedRowIndexes.map { Int($0) }
+            Swift.print(selected)
+        }
+    }
 
-//    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-//        let cell = MediaCell()
-//        let data = self.data[row]
-//        cell.data = data
-//        return cell
-//    }
-//    
 //    func tableView(_ tableView: NSTableView, didHighlightRowAt indexPath: IndexPath) {
 //        (tableView.cellForRow(at: indexPath) as! MediaCell).highlight()
 //    }

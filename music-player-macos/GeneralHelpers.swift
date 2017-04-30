@@ -49,10 +49,10 @@ class GeneralHelpers {
     }
     
     public static func getCoverUrl(_ url: String) -> String {
-        return "\(AppSingleton.app.apiUrl)\(url)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
+        return "\(AppSingleton.shared.apiUrl)\(url)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
     }
     
     public static func getSongUrl(id: String) -> URL? {
-        return URL(string: "\(AppSingleton.app.apiUrl)/songs/\(id)/file")
+        return URL(string: "\(AppSingleton.shared.apiUrl)/songs/\(id)/file")
     }
 }
