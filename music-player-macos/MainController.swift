@@ -16,6 +16,7 @@ class MainController: NSViewController {
     private var playingListViewEl: ListView!
     private var listViewType: String!
     private var playerEl: Player!
+    private var shouldRepeatPlaylist = false
     private var songsUpdatedObserver: NSObjectProtocol!
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
     private var onSongFinished: PlayerCore.EmptyCallback?
@@ -162,7 +163,7 @@ class MainController: NSViewController {
         playPlaylistSongAtIndex(0)
     }
     
-    private func playPlaylistSongAtIndex(_ idx: Int, shouldStartPlaying: Bool = true, shouldRestartIfOutOfIndex: Bool = true) {
+    private func playPlaylistSongAtIndex(_ idx: Int, shouldStartPlaying: Bool = true) {
         let songsPlayingCount = AppSingleton.shared.songsPlaying.count
         
         guard songsPlayingCount > 0 else { return }
@@ -172,10 +173,11 @@ class MainController: NSViewController {
             updatePlayerSong(AppSingleton.shared.songsPlaying[AppSingleton.shared.currentSongIdx])
             if shouldStartPlaying { play() }
             else { pause() }
-        } else if shouldRestartIfOutOfIndex {
+        } else {
             AppSingleton.shared.updateCurrentSongIdx(0)
             updatePlayerSong(AppSingleton.shared.songsPlaying[0])
-            if shouldStartPlaying { play() }
+            
+            if shouldRepeatPlaylist { play() }
             else { pause() }
         }
     }

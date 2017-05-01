@@ -48,8 +48,8 @@ class PlayerCore: AVPlayer {
         if keyPath == "rate" {
             if (rate == 0.0) {
                 // Playback stopped
-                
-                if (CMTimeGetSeconds(self.currentTime()) >= CMTimeGetSeconds(self.currentItem!.duration)) {
+
+                if Float64.abs(CMTimeGetSeconds(self.currentTime()) - CMTimeGetSeconds(self.currentItem!.duration)) < 0.05 {
                     onSongFinished?()
                 } else if (!self.currentItem!.isPlaybackLikelyToKeepUp) {
                     // Not ready to play, wait until enough data is loaded
