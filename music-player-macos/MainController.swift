@@ -68,7 +68,7 @@ class MainController: NSViewController {
         songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
         songsPlayingUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated)
         NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(goNextSong), name: .customFastForwardMediaKeyPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleForwardMediaKeyPressed), name: .customFastForwardMediaKeyPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(goPreviousSong), name: .customFastBackwardMediaKeyPressed, object: nil)
         
         initViews()
@@ -157,7 +157,7 @@ class MainController: NSViewController {
         playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx - 1, shouldStartPlaying: playerCoreEl.isPlaying)
     }
     
-    @objc private func goNextSong() {
+    private func goNextSong() {
         playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: playerCoreEl.isPlaying)
     }
     
@@ -172,7 +172,7 @@ class MainController: NSViewController {
         }
     }
     
-    private func playPlaylistSongAtIndex(_ idx: Int, shouldStartPlaying: Bool) {
+    private func playPlaylistSongAtIndex(_ idx: Int, shouldStartPlaying: Bool, shouldStartPlayingSongAfterReachingEnd: Bool? = nil) {
         let songsPlayingCount = AppSingleton.shared.songsPlaying.count
         guard songsPlayingCount > 0 && idx >= 0 else { return }
         
@@ -185,6 +185,8 @@ class MainController: NSViewController {
             AppSingleton.shared.updateCurrentSongIdx(0)
             updatePlayerSong(AppSingleton.shared.songsPlaying[0])
             
+            var shouldRepeatPlayingSongs = self.shouldRepeatPlayingSongs
+            if shouldStartPlayingSongAfterReachingEnd != nil { shouldRepeatPlayingSongs = shouldStartPlayingSongAfterReachingEnd! }
             if shouldRepeatPlayingSongs { playerCoreEl.play() }
             else { playerCoreEl.pause() }
         }
@@ -262,5 +264,9 @@ class MainController: NSViewController {
     
     private func handleSongsPlayingUpdated(_: Notification) {
         playingListViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songsPlaying))
+    }
+    
+    @objc private func handleForwardMediaKeyPressed() {
+        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: playerCoreEl.isPlaying, shouldStartPlayingSongAfterReachingEnd: true)
     }
 }
