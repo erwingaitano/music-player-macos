@@ -169,12 +169,12 @@ class MainController: NSViewController {
         
         if idx < songsPlayingCount {
             AppSingleton.shared.updateCurrentSongIdx(idx)
-            updateSong(AppSingleton.shared.songsPlaying[AppSingleton.shared.currentSongIdx])
+            updatePlayerSong(AppSingleton.shared.songsPlaying[AppSingleton.shared.currentSongIdx])
             if shouldStartPlaying { play() }
             else { pause() }
         } else if shouldRestartIfOutOfIndex {
             AppSingleton.shared.updateCurrentSongIdx(0)
-            updateSong(AppSingleton.shared.songsPlaying[0])
+            updatePlayerSong(AppSingleton.shared.songsPlaying[0])
             if shouldStartPlaying { play() }
             else { pause() }
         }
@@ -200,6 +200,17 @@ class MainController: NSViewController {
         listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songs))
     }
     
+    private func updatePlayerSong(_ song: SongModel) {
+        updateSongPromiseEl?.canceler()
+        playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
+        
+        updateSongPromiseEl = playerCoreEl.updateSong(id: song.id)
+        _ = updateSongPromiseEl?.promise.then(execute: { _ -> Void in
+            let duration = CMTimeGetSeconds(self.playerCoreEl.currentItem!.duration)
+            self.playerEl.updateSongInfo(song: song, currentTime: 0, duration: duration)
+        })
+    }
+    
     private func handleSliderChange(value: Double) {
         playerCoreEl.setTime(time: value)
     }
@@ -218,19 +229,8 @@ class MainController: NSViewController {
     }
     
     private func handleSongFinished() {
-        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1)
         playerEl.setPlayPauseBtnElStatus(false)
-    }
-    
-    private func updateSong(_ song: SongModel) {
-        updateSongPromiseEl?.canceler()
-        playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
-        
-        updateSongPromiseEl = playerCoreEl.updateSong(id: song.id)
-        _ = updateSongPromiseEl?.promise.then(execute: { _ -> Void in
-            let duration = CMTimeGetSeconds(self.playerCoreEl.currentItem!.duration)
-            self.playerEl.updateSongInfo(song: song, currentTime: 0, duration: duration)
-        })
+        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1)
     }
 
     private func handleListItemSelected(item: MediaCell.Data) {
