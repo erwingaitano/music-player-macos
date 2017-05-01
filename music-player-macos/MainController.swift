@@ -142,19 +142,9 @@ class MainController: NSViewController {
     
     // MARK: - Private Methods
     
-    private func play() {
-        playerCoreEl.play()
-        playerEl.setPlayPauseBtnElStatus()
-    }
-    
-    private func pause() {
-        playerCoreEl.pause()
-        playerEl.setPlayPauseBtnElStatus(false)
-    }
-    
     @objc private func togglePlayPause() {
-        if playerCoreEl.isPlaying { pause() }
-        else { play() }
+        if playerCoreEl.isPlaying { playerCoreEl.pause() }
+        else { playerCoreEl.play() }
     }
     
     private func playPlaylist(_ songs: [SongModel]) {
@@ -171,14 +161,14 @@ class MainController: NSViewController {
         if idx < songsPlayingCount {
             AppSingleton.shared.updateCurrentSongIdx(idx)
             updatePlayerSong(AppSingleton.shared.songsPlaying[AppSingleton.shared.currentSongIdx])
-            if shouldStartPlaying { play() }
-            else { pause() }
+            if shouldStartPlaying { playerCoreEl.play() }
+            else { playerCoreEl.pause() }
         } else {
             AppSingleton.shared.updateCurrentSongIdx(0)
             updatePlayerSong(AppSingleton.shared.songsPlaying[0])
             
-            if shouldRepeatPlaylist { play() }
-            else { pause() }
+            if shouldRepeatPlaylist { playerCoreEl.play() }
+            else { playerCoreEl.pause() }
         }
     }
     

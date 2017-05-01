@@ -49,7 +49,8 @@ class PlayerCore: AVPlayer {
             if (rate == 0.0) {
                 // Playback stopped
 
-                if Float64.abs(CMTimeGetSeconds(self.currentTime()) - CMTimeGetSeconds(self.currentItem!.duration)) < 0.05 {
+                guard let duration = self.currentItem?.duration else { return }
+                if Float64.abs(CMTimeGetSeconds(self.currentTime()) - CMTimeGetSeconds(duration)) < 0.05 {
                     onSongFinished?()
                 } else if (!self.currentItem!.isPlaybackLikelyToKeepUp) {
                     // Not ready to play, wait until enough data is loaded
@@ -94,12 +95,16 @@ class PlayerCore: AVPlayer {
     
     public override func play() {
         super.play()
+        isPlaying = true
         startProgressTimer()
+        onSongStartedPlaying?()
     }
     
     public override func pause() {
         super.pause()
+        isPlaying = false
         cancelProgressTimer()
+        onSongPaused?()
     }
     
     private func startProgressTimer() {
