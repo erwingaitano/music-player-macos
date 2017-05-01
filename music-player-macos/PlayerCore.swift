@@ -28,7 +28,7 @@ class PlayerCore: AVPlayer {
     
     // MARK: - Inits
     
-    init(onProgress: OnProgress? = nil, onSongFinished: EmptyCallback? = nil, onSongStartedPlaying: EmptyCallback? = nil, onSongPaused: EmptyCallback? = nil) {
+    init(onProgress: OnProgress? = nil, onSongStartedPlaying: EmptyCallback? = nil, onSongPaused: EmptyCallback? = nil, onSongFinished: EmptyCallback? = nil) {
         super.init()
         self.onProgress = onProgress
         self.onSongStartedPlaying = onSongStartedPlaying
@@ -110,14 +110,14 @@ class PlayerCore: AVPlayer {
         startProgressTimer()
     }
     
-    public func playSong() {
+    public override func play() {
+        super.play()
         startProgressTimer()
-        play()
     }
     
-    public func pauseSong() {
+    public override func pause() {
+        super.pause()
         cancelProgressTimer()
-        pause()
     }
     
     private func startProgressTimer() {

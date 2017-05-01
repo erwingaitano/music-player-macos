@@ -7,19 +7,22 @@
 //
 
 import Cocoa
-import MediaPlayer
-import AVFoundation
 
 class Player: View {
-    // MARK: - Properties
+    // MARK: - Typealiases
 
-    private lazy var playerCoreEl: PlayerCore = {
-        let v = PlayerCore(onSongStartedPlaying: self.handleSongStartedPlaying, onSongPaused: self.handleSongPaused)
-        return v
-    }()
+    typealias OnSliderChange = (_ value: Double) -> Void
+    typealias OnPlayPauseBtnClick = () -> Void
     
-    private var playPauseBtnEl: Button = {
+    // MARK: - Properties
+    
+    private var onSliderChange: OnSliderChange?
+    private var onPlayPauseBtnClick: OnPlayPauseBtnClick?
+    
+    private lazy var playPauseBtnEl: Button = {
         let v = Button()
+        v.target = self
+        v.action = #selector(self.handlePlayPauseBtnElClick)
         v.widthAnchorToEqual(width: 80)
         v.heightAnchorToEqual(height: 80)
         v.image = #imageLiteral(resourceName: "icon - play")
@@ -68,7 +71,7 @@ class Player: View {
     
     private var infoSectionTitleEl: Label = {
         let v = Label()
-        v.stringValue = "This is the name of the Song"
+        v.stringValue = "-"
         v.font = NSFont.systemFont(ofSize: 18)
         v.textColor = .white
         return v
@@ -76,7 +79,7 @@ class Player: View {
     
     private var infoSectionSubtitleEl: Label = {
         let v = Label()
-        v.stringValue = "This is the album/artist"
+        v.stringValue = "-"
         v.font = NSFont.systemFont(ofSize: 14)
         v.textColor = .secondaryColor
         return v
@@ -84,7 +87,6 @@ class Player: View {
     
     private var infoSectionTimeStartEl: Label = {
         let v = Label()
-        v.stringValue = "-:--"
         v.font = NSFont.systemFont(ofSize: 13)
         v.textColor = .white
         v.alignment = .left
@@ -93,18 +95,17 @@ class Player: View {
     
     private var infoSectionTimeEndEl: Label = {
         let v = Label()
-        v.stringValue = "-:--"
         v.font = NSFont.systemFont(ofSize: 13)
         v.textColor = .white
         v.alignment = .right
         return v
     }()
     
-    private var infoSectionSliderEl: NSSlider = {
+    private lazy var infoSectionSliderEl: NSSlider = {
         let v = NSSlider()
         v.wantsLayer = true
-        v.maxValue = 200
-        v.floatValue = 50
+        v.target = self
+        v.action = #selector(self.handleSliderChange)
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#333333").cgColor
         return v
     }()
@@ -142,8 +143,8 @@ class Player: View {
         v.addSubview(self.infoSectionSliderEl)
         self.infoSectionSliderEl.heightAnchorToEqual(height: 20)
         self.infoSectionSliderEl.centerYAnchorToEqual(self.infoSectionTimeStartEl.centerYAnchor)
-        self.infoSectionSliderEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 50)
-        self.infoSectionSliderEl.rightAnchorToEqual(v.rightAnchor, constant: -50)
+        self.infoSectionSliderEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 55)
+        self.infoSectionSliderEl.rightAnchorToEqual(v.rightAnchor, constant: -55)
         
         return v
     }()
@@ -171,21 +172,16 @@ class Player: View {
     
     // MARK: - Inits
 
-    override init() {
+    init(onPlayPauseBtnClick: OnPlayPauseBtnClick?, onSliderChange: OnSliderChange?) {
         super.init()
+        self.onPlayPauseBtnClick = onPlayPauseBtnClick
+        self.onSliderChange = onSliderChange
         layer?.backgroundColor = NSColor.black.cgColor
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePlayPauseMediaKey), name: .customPlayPauseMediaKeyPressed, object: nil)
-        layer?.addSublayer(AVPlayerLayer(player: playerCoreEl))
-        
         initViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     private func initViews() {
@@ -196,49 +192,53 @@ class Player: View {
     }
     
     // MARK: - Private Methods
-
-    @objc private func handlePlayPauseMediaKey() {
-        if playerCoreEl.isPlaying {
-            playerCoreEl.pauseSong()
-        } else {
-            playerCoreEl.playSong()
-        }
+    
+    @objc private func handleSliderChange() {
+         onSliderChange?(infoSectionSliderEl.doubleValue)
     }
     
-    private func handleSongStartedPlaying() {
-        setPlayPauseBtnElStatus()
+    @objc private func handlePlayPauseBtnElClick() {
+         onPlayPauseBtnClick?()
     }
     
-    private func handleSongPaused() {
-        setPlayPauseBtnElStatus(false)
-    }
+    // MARK: - API Methods
     
-    private func setPlayPauseBtnElStatus(_ isPlaying: Bool = true) {
+    public func setPlayPauseBtnElStatus(_ isPlaying: Bool = true) {
         if isPlaying { playPauseBtnEl.image = #imageLiteral(resourceName: "icon - pause") }
         else { playPauseBtnEl.image = #imageLiteral(resourceName: "icon - play") }
     }
     
-    // MARK: - API Methods
-
-    private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
-    public func updateSong(_ song: SongModel) {
-        updateSongPromiseEl?.canceler()
+    public func updateTimeLabels(currentTime: Double?, duration: Double?) {
+        guard let currentTime = currentTime, let duration = duration, !duration.isNaN else {
+            infoSectionTimeStartEl.stringValue = "-:--"
+            infoSectionTimeEndEl.stringValue = "-:--"
+            return
+        }
+        
+        infoSectionTimeEndEl.stringValue = Int(duration).getMinuteSecondFormattedString()
+        infoSectionTimeStartEl.stringValue = Int(currentTime).getMinuteSecondFormattedString()
+    }
+    
+    public func updateSlider(currentTime: Double?, duration: Double?) {
+        guard let currentTime = currentTime, let duration = duration else {
+            infoSectionSliderEl.isEnabled = false
+            infoSectionSliderEl.maxValue = 0
+            infoSectionSliderEl.doubleValue = 0
+            return
+        }
+        
+        if !duration.isNaN {
+            infoSectionSliderEl.maxValue = duration
+            infoSectionSliderEl.doubleValue = currentTime
+            infoSectionSliderEl.isEnabled = true
+        }
+    }
+    
+    public func updateSongInfo(song: SongModel, currentTime: Double?, duration: Double?) {
         self.infoSectionImgEl.setCovers(song.allCovers)
         self.infoSectionTitleEl.stringValue = song.name
         self.infoSectionSubtitleEl.stringValue = GeneralHelpers.getAlbumArtist(album: song.album, artist: song.artist)
-        
-        updateSongPromiseEl = playerCoreEl.updateSong(id: song.id)
-        _ = updateSongPromiseEl?.promise.then(execute: { _ -> Void in
-        })
-    }
-    
-    public func play() {
-        playerCoreEl.playSong()
-        setPlayPauseBtnElStatus()
-    }
-    
-    public func pause() {
-        playerCoreEl.pauseSong()
-        setPlayPauseBtnElStatus(false)
+        updateTimeLabels(currentTime: currentTime, duration: duration)
+        updateSlider(currentTime: currentTime, duration: currentTime)
     }
 }

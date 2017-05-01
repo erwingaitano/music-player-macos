@@ -14,4 +14,6 @@ extension Notification.Name {
     static let customFastBackwardMediaKeyPressed = Notification.Name("customFastBackwardMediaKeyPressed")
     static let customSongsUpdated = Notification.Name("customSongsUpdated")
     static let customPlaylistsUpdated = Notification.Name("customPlaylistsUpdated")
+    static let customSongsPlayingUpdated = Notification.Name("customSongsPlayingUpdated")
+    static let customCurrentSongIdxUpdated = Notification.Name("customCurrentSongIdxUpdated")
 }
