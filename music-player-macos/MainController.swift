@@ -68,7 +68,7 @@ class MainController: NSViewController {
         songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
         songsPlayingUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated)
         NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleForwardMediaKeyPressed), name: .customFastForwardMediaKeyPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleFastForwardClick), name: .customFastForwardMediaKeyPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(goPreviousSong), name: .customFastBackwardMediaKeyPressed, object: nil)
         
         initViews()
@@ -96,7 +96,7 @@ class MainController: NSViewController {
         title.font = NSFont.systemFont(ofSize: 18)
         title.textColor = .blue
         
-        playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onSliderChange: handleSliderChange)
+        playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onFastBackwardClick: goPreviousSong, onFastForwardClick: handleFastForwardClick, onSliderChange: handleSliderChange)
         view.addSubview(playerEl)
         playerEl.heightAnchorToEqual(height: 100)
         playerEl.topAnchorToEqual(view.topAnchor)
@@ -266,7 +266,7 @@ class MainController: NSViewController {
         playingListViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songsPlaying))
     }
     
-    @objc private func handleForwardMediaKeyPressed() {
+    @objc private func handleFastForwardClick() {
         playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: playerCoreEl.isPlaying, shouldStartPlayingSongAfterReachingEnd: true)
     }
 }

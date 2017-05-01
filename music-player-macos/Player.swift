@@ -12,12 +12,14 @@ class Player: View {
     // MARK: - Typealiases
 
     typealias OnSliderChange = (_ value: Double) -> Void
-    typealias OnPlayPauseBtnClick = () -> Void
+    typealias EmptyCallback = () -> Void
     
     // MARK: - Properties
     
     private var onSliderChange: OnSliderChange?
-    private var onPlayPauseBtnClick: OnPlayPauseBtnClick?
+    private var onPlayPauseBtnClick: EmptyCallback?
+    private var onFastBackwardClick: EmptyCallback?
+    private var onFastForwardClick: EmptyCallback?
     
     private lazy var playPauseBtnEl: Button = {
         let v = Button()
@@ -29,16 +31,20 @@ class Player: View {
         return v
     }()
     
-    private var fastBackwardBtnEl: Button = {
+    private lazy var fastBackwardBtnEl: Button = {
         let v = Button()
+        v.target = self
+        v.action = #selector(self.handleFastBackwardClick)
         v.widthAnchorToEqual(width: 37)
         v.heightAnchorToEqual(height: 30)
         v.image = #imageLiteral(resourceName: "icon - fastbackward")
         return v
     }()
     
-    private var fastForwardBtnEl: Button = {
+    private lazy var fastForwardBtnEl: Button = {
         let v = Button()
+        v.target = self
+        v.action = #selector(self.handleFastForwardClick)
         v.widthAnchorToEqual(width: 37)
         v.heightAnchorToEqual(height: 30)
         v.image = #imageLiteral(resourceName: "icon - fastforward")
@@ -172,9 +178,11 @@ class Player: View {
     
     // MARK: - Inits
 
-    init(onPlayPauseBtnClick: OnPlayPauseBtnClick?, onSliderChange: OnSliderChange?) {
+    init(onPlayPauseBtnClick: EmptyCallback?, onFastBackwardClick: EmptyCallback?, onFastForwardClick: EmptyCallback?, onSliderChange: OnSliderChange?) {
         super.init()
         self.onPlayPauseBtnClick = onPlayPauseBtnClick
+        self.onFastBackwardClick = onFastBackwardClick
+        self.onFastForwardClick = onFastForwardClick
         self.onSliderChange = onSliderChange
         layer?.backgroundColor = NSColor.black.cgColor
         initViews()
@@ -199,6 +207,14 @@ class Player: View {
     
     @objc private func handlePlayPauseBtnElClick() {
          onPlayPauseBtnClick?()
+    }
+    
+    @objc private func handleFastForwardClick() {
+        onFastForwardClick?()
+    }
+    
+    @objc private func handleFastBackwardClick() {
+        onFastBackwardClick?()
     }
     
     // MARK: - API Methods
