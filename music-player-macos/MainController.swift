@@ -16,11 +16,11 @@ class MainController: NSViewController {
     private var playingListViewEl: ListView!
     private var listViewType: String!
     private var playerEl: Player!
-    private var shouldRepeatPlaylist = false
+    private var shouldRepeatPlayingSongs = false
     private var songsUpdatedObserver: NSObjectProtocol!
     private var songsPlayingUpdatedObserver: NSObjectProtocol!
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
-    private var onSongFinished: PlayerCore.EmptyCallback?
+    private var getPlaylistSongsPromiseEl: ApiEndpointsHelpers.SongsPromiseEl?
     
     private lazy var playerCoreEl: PlayerCore = {
         let v = PlayerCore(onProgress: self.handleProgress, onSongStartedPlaying: self.handleSongStartedPlaying, onSongPaused: self.handleSongPaused, onSongFinished: self.handleSongFinished)
@@ -68,6 +68,8 @@ class MainController: NSViewController {
         songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
         songsPlayingUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated)
         NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(goNextSong), name: .customFastForwardMediaKeyPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(goPreviousSong), name: .customFastBackwardMediaKeyPressed, object: nil)
         
         initViews()
         
@@ -151,15 +153,28 @@ class MainController: NSViewController {
         else { playerCoreEl.play() }
     }
     
-    private func playPlaylist(_ songs: [SongModel]) {
-        AppSingleton.shared.updateSongsPlaying(songs)
-        playPlaylistSongAtIndex(0)
+    @objc private func goPreviousSong() {
+        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx - 1, shouldStartPlaying: playerCoreEl.isPlaying)
     }
     
-    private func playPlaylistSongAtIndex(_ idx: Int, shouldStartPlaying: Bool = true) {
-        let songsPlayingCount = AppSingleton.shared.songsPlaying.count
+    @objc private func goNextSong() {
+        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: playerCoreEl.isPlaying)
+    }
+    
+    private func playPlaylist(_ songs: [SongModel]) {
+        AppSingleton.shared.updateSongsPlaying(songs)
         
-        guard songsPlayingCount > 0 else { return }
+        if songs.count == 0 {
+            playerCoreEl.stop()
+            playerEl.emptySongInfo()
+        } else {
+            playPlaylistSongAtIndex(0, shouldStartPlaying: true)
+        }
+    }
+    
+    private func playPlaylistSongAtIndex(_ idx: Int, shouldStartPlaying: Bool) {
+        let songsPlayingCount = AppSingleton.shared.songsPlaying.count
+        guard songsPlayingCount > 0 && idx >= 0 else { return }
         
         if idx < songsPlayingCount {
             AppSingleton.shared.updateCurrentSongIdx(idx)
@@ -170,7 +185,7 @@ class MainController: NSViewController {
             AppSingleton.shared.updateCurrentSongIdx(0)
             updatePlayerSong(AppSingleton.shared.songsPlaying[0])
             
-            if shouldRepeatPlaylist { playerCoreEl.play() }
+            if shouldRepeatPlayingSongs { playerCoreEl.play() }
             else { playerCoreEl.pause() }
         }
     }
@@ -221,19 +236,24 @@ class MainController: NSViewController {
     
     private func handleSongFinished() {
         playerEl.setPlayPauseBtnElStatus(false)
-        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1)
+        playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: true)
     }
 
     private func handleListItemSelected(item: MediaCell.Data) {
         if listViewType == "songs" {
             let song = AppSingleton.shared.songs.first(where: { $0.id == item.id })!
             playPlaylist([song])
+        } else if listViewType == "playlists" {
+            getPlaylistSongsPromiseEl?.canceler()
+            playPlaylist([])
+            getPlaylistSongsPromiseEl = ApiEndpointsHelpers.getPlaylistSongs(item.id)
+            _ = getPlaylistSongsPromiseEl!.promise.then(execute: playPlaylist)
         }
     }
     
     private func handlePlayingListItemSelected(item: MediaCell.Data) {
         let idx = AppSingleton.shared.songsPlaying.index(where: { $0.id == item.id })!
-        playPlaylistSongAtIndex(idx)
+        playPlaylistSongAtIndex(idx, shouldStartPlaying: true)
     }
     
     private func handleSongsUpdated(_: Notification) {

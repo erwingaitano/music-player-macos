@@ -107,6 +107,11 @@ class PlayerCore: AVPlayer {
         onSongPaused?()
     }
     
+    public func stop() {
+        setTime(time: 0)
+        pause()
+    }
+    
     private func startProgressTimer() {
         if progressTimer == nil {
             progressTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(handleSongProgress), userInfo: nil, repeats: true)

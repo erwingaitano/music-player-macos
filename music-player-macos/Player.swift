@@ -235,10 +235,18 @@ class Player: View {
     }
     
     public func updateSongInfo(song: SongModel, currentTime: Double?, duration: Double?) {
-        self.infoSectionImgEl.setCovers(song.allCovers)
-        self.infoSectionTitleEl.stringValue = song.name
-        self.infoSectionSubtitleEl.stringValue = GeneralHelpers.getAlbumArtist(album: song.album, artist: song.artist)
+        infoSectionImgEl.setCovers(song.allCovers)
+        infoSectionTitleEl.stringValue = song.name
+        infoSectionSubtitleEl.stringValue = GeneralHelpers.getAlbumArtist(album: song.album, artist: song.artist)
         updateTimeLabels(currentTime: currentTime, duration: duration)
         updateSlider(currentTime: currentTime, duration: currentTime)
+    }
+    
+    public func emptySongInfo() {
+        infoSectionImgEl.setCovers([])
+        infoSectionTitleEl.stringValue = "-"
+        infoSectionSubtitleEl.stringValue = "-"
+        updateTimeLabels(currentTime: nil, duration: nil)
+        updateSlider(currentTime: nil, duration: nil)
     }
 }
