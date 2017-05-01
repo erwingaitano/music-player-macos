@@ -18,6 +18,7 @@ class MainController: NSViewController {
     private var playerEl: Player!
     private var shouldRepeatPlaylist = false
     private var songsUpdatedObserver: NSObjectProtocol!
+    private var songsPlayingUpdatedObserver: NSObjectProtocol!
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
     private var onSongFinished: PlayerCore.EmptyCallback?
     
@@ -62,12 +63,14 @@ class MainController: NSViewController {
     init() {
         super.init(nibName: nil, bundle: nil)!
         view.layer?.backgroundColor = NSColor.black.cgColor
-        songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
-        NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
         view.layer?.addSublayer(AVPlayerLayer(player: playerCoreEl))
+        
+        songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
+        songsPlayingUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated)
+        NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
+        
         initViews()
         
-        updateSongs()
         showAllSongs()
         AppSingleton.shared.updateSongs()
         AppSingleton.shared.updatePlaylists()
@@ -78,6 +81,7 @@ class MainController: NSViewController {
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(songsPlayingUpdatedObserver)
         NotificationCenter.default.removeObserver(songsUpdatedObserver)
         NotificationCenter.default.removeObserver(self)
     }
@@ -148,7 +152,6 @@ class MainController: NSViewController {
     }
     
     private func playPlaylist(_ songs: [SongModel]) {
-        playingListViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(songs))
         AppSingleton.shared.updateSongsPlaying(songs)
         playPlaylistSongAtIndex(0)
     }
@@ -186,10 +189,6 @@ class MainController: NSViewController {
         listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songs))
         listViewEl.updateTitle("All Songs")
         listViewType = "songs"
-    }
-    
-    private func updateSongs() {
-        listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songs))
     }
     
     private func updatePlayerSong(_ song: SongModel) {
@@ -238,6 +237,10 @@ class MainController: NSViewController {
     }
     
     private func handleSongsUpdated(_: Notification) {
-        updateSongs()
+        showAllSongs()
+    }
+    
+    private func handleSongsPlayingUpdated(_: Notification) {
+        playingListViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songsPlaying))
     }
 }

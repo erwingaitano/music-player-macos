@@ -32,11 +32,11 @@ class AppSingleton {
     
     public func updateSongsPlaying(_ songs: [SongModel]) {
         songsPlaying = songs
-//        NotificationCenter.default.post(name: .customSongsPlayingUpdated, object: nil)
+        NotificationCenter.default.post(name: .customSongsPlayingUpdated, object: nil)
     }
     
     public func updateCurrentSongIdx(_ idx: Int) {
         currentSongIdx = idx
-//        NotificationCenter.default.post(name: .customCurrentSongIdxUpdated, object: nil)
+        NotificationCenter.default.post(name: .customCurrentSongIdxUpdated, object: nil)
     }
 }
