@@ -12,6 +12,7 @@ class Player: View {
     // MARK: - Typealiases
 
     typealias OnSliderChange = (_ value: Double) -> Void
+    typealias OnVolumeSliderChange = OnSliderChange
     typealias EmptyCallback = () -> Void
     
     // MARK: - Properties
@@ -20,13 +21,14 @@ class Player: View {
     private var onPlayPauseBtnClick: EmptyCallback?
     private var onFastBackwardClick: EmptyCallback?
     private var onFastForwardClick: EmptyCallback?
+    public var onVolumeSliderChange: OnVolumeSliderChange?
     
     private lazy var playPauseBtnEl: Button = {
         let v = Button()
         v.target = self
         v.action = #selector(self.handlePlayPauseBtnElClick)
-        v.widthAnchorToEqual(width: 80)
-        v.heightAnchorToEqual(height: 80)
+        v.widthAnchorToEqual(width: 70)
+        v.heightAnchorToEqual(height: 70)
         v.image = #imageLiteral(resourceName: "icon - play")
         return v
     }()
@@ -35,8 +37,8 @@ class Player: View {
         let v = Button()
         v.target = self
         v.action = #selector(self.handleFastBackwardClick)
-        v.widthAnchorToEqual(width: 37)
-        v.heightAnchorToEqual(height: 30)
+        v.widthAnchorToEqual(width: 30)
+//        v.heightAnchorToEqual(height: 30)
         v.image = #imageLiteral(resourceName: "icon - fastbackward")
         return v
     }()
@@ -45,8 +47,8 @@ class Player: View {
         let v = Button()
         v.target = self
         v.action = #selector(self.handleFastForwardClick)
-        v.widthAnchorToEqual(width: 37)
-        v.heightAnchorToEqual(height: 30)
+        v.widthAnchorToEqual(width: 30)
+//        v.heightAnchorToEqual(height: 30)
         v.image = #imageLiteral(resourceName: "icon - fastforward")
         return v
     }()
@@ -116,6 +118,15 @@ class Player: View {
         return v
     }()
     
+    private lazy var volumeSliderEl: NSSlider = {
+        let v = NSSlider()
+        v.wantsLayer = true
+        v.target = self
+        v.action = #selector(self.handleVolumeSliderChange)
+        v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#333333").cgColor
+        return v
+    }()
+    
     private lazy var containerInfoSectionEl: View = {
         let v = View()
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#222222").cgColor
@@ -158,19 +169,24 @@ class Player: View {
     private lazy var mainContainerEl: View = {
         let v = View()
         
-        v.addSubview(self.containerInfoSectionEl)
-        self.containerInfoSectionEl.topAnchorToEqual(v.topAnchor)
-        self.containerInfoSectionEl.bottomAnchorToEqual(v.bottomAnchor)
-        self.containerInfoSectionEl.widthAnchorToEqual(width: 405)
-        self.containerInfoSectionEl.rightAnchorToEqual(v.rightAnchor)
+        v.addSubview(self.volumeSliderEl)
+        self.volumeSliderEl.heightAnchorToEqual(height: 20)
+        self.volumeSliderEl.widthAnchorToEqual(width: 80)
+        self.volumeSliderEl.centerYAnchorToEqual(v.centerYAnchor)
         
         v.addSubview(self.mediaControlsEl)
+        self.mediaControlsEl.leftAnchorToEqual(self.volumeSliderEl.rightAnchor, constant: 15)
         self.mediaControlsEl.topAnchorToEqual(v.topAnchor)
         self.mediaControlsEl.bottomAnchorToEqual(v.bottomAnchor)
-        self.mediaControlsEl.rightAnchorToEqual(self.containerInfoSectionEl.leftAnchor, constant: -20)
-        self.mediaControlsEl.widthAnchorToEqual(width: 200)
+        self.mediaControlsEl.widthAnchorToEqual(width: 150)
+        
+        v.addSubview(self.containerInfoSectionEl)
+        self.containerInfoSectionEl.widthAnchorToEqual(width: 405)
+        self.containerInfoSectionEl.topAnchorToEqual(v.topAnchor)
+        self.containerInfoSectionEl.bottomAnchorToEqual(v.bottomAnchor)
+        self.containerInfoSectionEl.leftAnchorToEqual(self.mediaControlsEl.rightAnchor, constant: 15)
 
-        v.leftAnchorToEqual(self.mediaControlsEl.leftAnchor)
+        v.leftAnchorToEqual(self.volumeSliderEl.leftAnchor)
         v.rightAnchorToEqual(self.containerInfoSectionEl.rightAnchor)
         
         return v
@@ -200,6 +216,10 @@ class Player: View {
     }
     
     // MARK: - Private Methods
+    
+    @objc private func handleVolumeSliderChange() {
+        onVolumeSliderChange?(volumeSliderEl.doubleValue)
+    }
     
     @objc private func handleSliderChange() {
          onSliderChange?(infoSectionSliderEl.doubleValue)
@@ -264,5 +284,9 @@ class Player: View {
         infoSectionSubtitleEl.stringValue = "-"
         updateTimeLabels(currentTime: nil, duration: nil)
         updateSlider(currentTime: nil, duration: nil)
+    }
+    
+    public func updateVolumeSlider(_ value: Double) {
+        volumeSliderEl.doubleValue = value
     }
 }

@@ -75,6 +75,9 @@ class MainController: NSViewController {
         title.textColor = .blue
         
         playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onFastBackwardClick: goPreviousSong, onFastForwardClick: handleFastForwardClick, onSliderChange: handleSliderChange)
+        playerEl.onVolumeSliderChange = handleVolumeSliderChange
+        playerEl.updateVolumeSlider(Double(playerCoreEl.volume))
+        
         view.addSubview(playerEl)
         playerEl.heightAnchorToEqual(height: 100)
         playerEl.topAnchorToEqual(view.topAnchor)
@@ -263,5 +266,9 @@ class MainController: NSViewController {
                 self.playPlaylist(songs)
             })
         }
+    }
+    
+    private func handleVolumeSliderChange(value: Double) {
+        playerCoreEl.volume = Float(value)
     }
 }
