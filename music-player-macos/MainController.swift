@@ -101,18 +101,20 @@ class MainController: NSViewController {
         listViewEl.leftAnchorToEqual(sidebarEl.rightAnchor)
         listViewEl.rightAnchorToEqual(playingListViewEl.leftAnchor)
         
-        let playerElSeparatorEl = View()
+        let sidebarElSeparatorEl = getSeparator(width: 1)
+        view.addSubview(sidebarElSeparatorEl)
+        sidebarElSeparatorEl.topAnchorToEqual(playerEl.bottomAnchor)
+        sidebarElSeparatorEl.bottomAnchorToEqual(view.bottomAnchor)
+        sidebarElSeparatorEl.leftAnchorToEqual(sidebarEl.rightAnchor)
+        
+        let playerElSeparatorEl = getSeparator(height: 1)
         view.addSubview(playerElSeparatorEl)
-        playerElSeparatorEl.layer?.backgroundColor = NSColor.white.cgColor
-        playerElSeparatorEl.heightAnchorToEqual(height: 1)
         playerElSeparatorEl.topAnchorToEqual(playerEl.bottomAnchor)
         playerElSeparatorEl.leftAnchorToEqual(playerEl.leftAnchor)
         playerElSeparatorEl.rightAnchorToEqual(playerEl.rightAnchor)
         
-        let playingListElSeparatorEl = View()
+        let playingListElSeparatorEl = getSeparator(width: 1)
         view.addSubview(playingListElSeparatorEl)
-        playingListElSeparatorEl.layer?.backgroundColor = NSColor.white.cgColor
-        playingListElSeparatorEl.widthAnchorToEqual(width: 1)
         playingListElSeparatorEl.topAnchorToEqual(playingListViewEl.topAnchor)
         playingListElSeparatorEl.bottomAnchorToEqual(playingListViewEl.bottomAnchor)
         playingListElSeparatorEl.leftAnchorToEqual(playingListViewEl.leftAnchor)
@@ -184,6 +186,15 @@ class MainController: NSViewController {
             let duration = CMTimeGetSeconds(self.playerCoreEl.currentItem!.duration)
             self.playerEl.updateSongInfo(song: song, currentTime: 0, duration: duration)
         })
+    }
+    
+    private func getSeparator(width: CGFloat? = nil, height: CGFloat? = nil) -> View {
+        let v = View()
+        v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#2f2f2f").cgColor
+        
+        if let width = width { v.widthAnchorToEqual(width: 1) }
+        if let heigth = height { v.heightAnchorToEqual(height: 1) }
+        return v
     }
     
     private func handleSliderChange(value: Double) {
