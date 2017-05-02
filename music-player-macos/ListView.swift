@@ -19,8 +19,9 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     private let cellId = "cellId"
     private var onItemSelected: OnItemSelected?
     private var data: [MediaCell.Data] = []
-    private var scrollForTableEl: NSScrollView = {
+    private var scrollContainerEl: NSScrollView = {
         let v = NSScrollView()
+        v.scrollerKnobStyle = .light
         v.hasVerticalScroller = true
         return v
     }()
@@ -59,7 +60,7 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
         tableEl.dataSource = self
         tableEl.doubleAction = #selector(handleDoubleClick)
 //        tableEl.action = #selector(handleDoubleClick)
-        scrollForTableEl.documentView = tableEl
+        scrollContainerEl.documentView = tableEl
         
         layer?.backgroundColor = NSColor.black.cgColor
         
@@ -67,11 +68,11 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
         titleEl.topAnchorToEqual(topAnchor, constant: 30)
         titleEl.leftAnchorToEqual(leftAnchor, constant: 20)
         
-        addSubview(scrollForTableEl)
-        scrollForTableEl.topAnchorToEqual(titleEl.bottomAnchor, constant: 20)
-        scrollForTableEl.leftAnchorToEqual(leftAnchor)
-        scrollForTableEl.rightAnchorToEqual(rightAnchor)
-        scrollForTableEl.bottomAnchorToEqual(bottomAnchor)
+        addSubview(scrollContainerEl)
+        scrollContainerEl.topAnchorToEqual(titleEl.bottomAnchor, constant: 20)
+        scrollContainerEl.leftAnchorToEqual(leftAnchor)
+        scrollContainerEl.rightAnchorToEqual(rightAnchor)
+        scrollContainerEl.bottomAnchorToEqual(bottomAnchor)
     }
     
     required init?(coder aDecoder: NSCoder) {

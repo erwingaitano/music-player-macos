@@ -14,11 +14,11 @@ class MainController: NSViewController {
 
     private var listViewEl: ListView!
     private var playingListViewEl: ListView!
-    private var listViewType: String!
     private var playerEl: Player!
     private var shouldRepeatPlayingSongs = false
     private var songsUpdatedObserver: NSObjectProtocol!
     private var songsPlayingUpdatedObserver: NSObjectProtocol!
+    private var playlistsUpdatedObserver: NSObjectProtocol!
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
     private var getPlaylistSongsPromiseEl: ApiEndpointsHelpers.SongsPromiseEl?
     
@@ -27,34 +27,10 @@ class MainController: NSViewController {
         return v
     }()
     
-    private lazy var sidebarEl: View = {
-        let v = View()
-        v.layer?.backgroundColor = NSColor.blue.cgColor
-        
-        let allSongsBtnEl = NSButton()
-        allSongsBtnEl.title = "All Songs"
-        allSongsBtnEl.target = self
-        allSongsBtnEl.action = #selector(self.showAllSongs)
-        v.addSubview(allSongsBtnEl)
-        allSongsBtnEl.topAnchorToEqual(v.topAnchor)
-        allSongsBtnEl.leftAnchorToEqual(v.leftAnchor)
-
-        let allPlaylistsBtnEl = NSButton()
-        allPlaylistsBtnEl.title = "All Playlists"
-        allPlaylistsBtnEl.target = self
-        allPlaylistsBtnEl.action = #selector(self.showAllPlaylists)
-        v.addSubview(allPlaylistsBtnEl)
-        allPlaylistsBtnEl.topAnchorToEqual(allSongsBtnEl.bottomAnchor)
-        allPlaylistsBtnEl.leftAnchorToEqual(v.leftAnchor)
-        
-        let playAllSongsBtnEl = NSButton()
-        playAllSongsBtnEl.title = "Play all songs"
-        playAllSongsBtnEl.target = self
-        playAllSongsBtnEl.action = #selector(self.playAllSongs)
-        v.addSubview(playAllSongsBtnEl)
-        playAllSongsBtnEl.topAnchorToEqual(allPlaylistsBtnEl.bottomAnchor)
-        playAllSongsBtnEl.leftAnchorToEqual(v.leftAnchor)
+    private var libraryData = [(id: "allsongs", name: "All Songs")]
     
+    private lazy var sidebarEl: Sidebar = {
+        let v = Sidebar(items: [.library: self.libraryData, .playlists: []], onItemClick: self.handleSidebarItemClick)
         return v
     }()
     
@@ -66,6 +42,7 @@ class MainController: NSViewController {
         view.layer?.addSublayer(AVPlayerLayer(player: playerCoreEl))
         
         songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
+        playlistsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customPlaylistsUpdated, object: nil, queue: nil, using: handlePlaylistsUpdated)
         songsPlayingUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated)
         NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleFastForwardClick), name: .customFastForwardMediaKeyPressed, object: nil)
@@ -83,8 +60,9 @@ class MainController: NSViewController {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(songsPlayingUpdatedObserver)
         NotificationCenter.default.removeObserver(songsUpdatedObserver)
+        NotificationCenter.default.removeObserver(playlistsUpdatedObserver)
+        NotificationCenter.default.removeObserver(songsPlayingUpdatedObserver)
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -192,20 +170,9 @@ class MainController: NSViewController {
         }
     }
     
-    @objc private func playAllSongs() {
-        playPlaylist(AppSingleton.shared.songs)
-    }
-    
-    @objc private func showAllPlaylists() {
-        listViewEl.updateData(ListView.getMediaCellDataArrayFromPlaylistModelArray(AppSingleton.shared.playlists))
-        listViewEl.updateTitle("All Playlists")
-        listViewType = "playlists"
-    }
-    
     @objc private func showAllSongs() {
         listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songs))
         listViewEl.updateTitle("All Songs")
-        listViewType = "songs"
     }
     
     private func updatePlayerSong(_ song: SongModel) {
@@ -242,15 +209,8 @@ class MainController: NSViewController {
     }
 
     private func handleListItemSelected(item: MediaCell.Data) {
-        if listViewType == "songs" {
-            let song = AppSingleton.shared.songs.first(where: { $0.id == item.id })!
-            playPlaylist([song])
-        } else if listViewType == "playlists" {
-            getPlaylistSongsPromiseEl?.canceler()
-            playPlaylist([])
-            getPlaylistSongsPromiseEl = ApiEndpointsHelpers.getPlaylistSongs(item.id)
-            _ = getPlaylistSongsPromiseEl!.promise.then(execute: playPlaylist)
-        }
+        let song = AppSingleton.shared.songs.first(where: { $0.id == item.id })!
+        playPlaylist([song])
     }
     
     private func handlePlayingListItemSelected(item: MediaCell.Data) {
@@ -262,11 +222,35 @@ class MainController: NSViewController {
         showAllSongs()
     }
     
+    private func handlePlaylistsUpdated(_: Notification) {
+        sidebarEl.updatePlaylists(AppSingleton.shared.playlists)
+    }
+    
     private func handleSongsPlayingUpdated(_: Notification) {
         playingListViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songsPlaying))
     }
     
     @objc private func handleFastForwardClick() {
         playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: playerCoreEl.isPlaying, shouldStartPlayingSongAfterReachingEnd: true)
+    }
+    
+    private func handleSidebarItemClick(type: Sidebar.Kind, id: String) {
+        switch type {
+        case .library:
+            if id == "allsongs" {
+                showAllSongs()
+                playPlaylist(AppSingleton.shared.songs)
+            }
+        case .playlists:
+            getPlaylistSongsPromiseEl?.canceler()
+            playPlaylist([])
+            listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray([]))
+            listViewEl.updateTitle("Playlist Songs")
+            getPlaylistSongsPromiseEl = ApiEndpointsHelpers.getPlaylistSongs(id)
+            _ = getPlaylistSongsPromiseEl!.promise.then(execute: { songs -> Void in
+                self.listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(songs))
+                self.playPlaylist(songs)
+            })
+        }
     }
 }
