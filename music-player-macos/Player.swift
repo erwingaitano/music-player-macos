@@ -109,21 +109,17 @@ class Player: View {
         return v
     }()
     
-    private lazy var infoSectionSliderEl: NSSlider = {
-        let v = NSSlider()
-        v.wantsLayer = true
+    private lazy var infoSectionSliderEl: Slider = {
+        let v = Slider()
         v.target = self
         v.action = #selector(self.handleSliderChange)
-        v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#333333").cgColor
         return v
     }()
     
-    private lazy var volumeSliderEl: NSSlider = {
-        let v = NSSlider()
-        v.wantsLayer = true
+    private lazy var volumeSliderEl: Slider = {
+        let v = Slider()
         v.target = self
         v.action = #selector(self.handleVolumeSliderChange)
-        v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#333333").cgColor
         return v
     }()
     

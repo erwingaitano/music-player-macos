@@ -195,8 +195,8 @@ class MainController: NSViewController {
         let v = View()
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#2f2f2f").cgColor
         
-        if let width = width { v.widthAnchorToEqual(width: 1) }
-        if let heigth = height { v.heightAnchorToEqual(height: 1) }
+        if let width = width { v.widthAnchorToEqual(width: width) }
+        if let height = height { v.heightAnchorToEqual(height: height) }
         return v
     }
     

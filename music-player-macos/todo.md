@@ -1,4 +1,5 @@
 - volume slider
+- fix the slider styles
 
 # TODO
 - repeat playlist
