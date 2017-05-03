@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7F362D55E1AC745CDD64944C /* Pods_music_player_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CF8BE9A0F5F244268306200 /* Pods_music_player_macos.framework */; };
+		AA45EF131EB94F74006635B3 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA45EF121EB94F74006635B3 /* ImageExtensions.swift */; };
 		AA6D147F1EB415EE005DBC83 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6D147E1EB415EE005DBC83 /* AppDelegate.swift */; };
 		AA6D14811EB415EE005DBC83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6D14801EB415EE005DBC83 /* Assets.xcassets */; };
 		AA6D14841EB415EE005DBC83 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA6D14821EB415EE005DBC83 /* MainMenu.xib */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		9CF8BE9A0F5F244268306200 /* Pods_music_player_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_music_player_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA45EF121EB94F74006635B3 /* ImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
 		AA6D147B1EB415EE005DBC83 /* music-player-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "music-player-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA6D147E1EB415EE005DBC83 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA6D14801EB415EE005DBC83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -125,8 +127,8 @@
 		AA6D14A61EB4179C005DBC83 /* _components */ = {
 			isa = PBXGroup;
 			children = (
-				AA6D148F1EB4175F005DBC83 /* MainController.swift */,
 				AA6D14A71EB417A7005DBC83 /* Player */,
+				AA6D148F1EB4175F005DBC83 /* MainController.swift */,
 				AA6D14961EB4175F005DBC83 /* View.swift */,
 				AA6D14AD1EB42CA0005DBC83 /* ListView.swift */,
 				AA6D14AF1EB42D20005DBC83 /* MediaCell.swift */,
@@ -155,6 +157,7 @@
 				AA6D14971EB4175F005DBC83 /* ViewExtensions.swift */,
 				AA6D14AB1EB4234C005DBC83 /* NotificationExtensions.swift */,
 				AA9672731EB5B62C008CE884 /* BasicExtensions.swift */,
+				AA45EF121EB94F74006635B3 /* ImageExtensions.swift */,
 			);
 			name = _extensions;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				AA6D149C1EB4175F005DBC83 /* MainController.swift in Sources */,
 				AA9672701EB50B36008CE884 /* Label.swift in Sources */,
 				AA6D14A01EB41760005DBC83 /* PlayerCover.swift in Sources */,
+				AA45EF131EB94F74006635B3 /* ImageExtensions.swift in Sources */,
 				AA6D14AC1EB4234C005DBC83 /* NotificationExtensions.swift in Sources */,
 				AA9672741EB5B62C008CE884 /* BasicExtensions.swift in Sources */,
 				AA9672781EB7DA03008CE884 /* Sidebar.swift in Sources */,

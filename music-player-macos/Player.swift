@@ -22,6 +22,12 @@ class Player: View {
     private var onFastBackwardClick: EmptyCallback?
     private var onFastForwardClick: EmptyCallback?
     public var onVolumeSliderChange: OnVolumeSliderChange?
+    public var onShuffleBtnClick: EmptyCallback?
+    public var onRepeatBtnClick: EmptyCallback?
+    private static var shuffleImage = #imageLiteral(resourceName: "icon - shuffle")
+    private static var shuffleImageActive = shuffleImage.imageWithTintColor(tintColor: .secondaryColor)
+    private static var repeatImage = #imageLiteral(resourceName: "icon - repeat")
+    private static var repeatImageActive = repeatImage.imageWithTintColor(tintColor: .secondaryColor)
     
     private lazy var playPauseBtnEl: Button = {
         let v = Button()
@@ -38,7 +44,6 @@ class Player: View {
         v.target = self
         v.action = #selector(self.handleFastBackwardClick)
         v.widthAnchorToEqual(width: 30)
-//        v.heightAnchorToEqual(height: 30)
         v.image = #imageLiteral(resourceName: "icon - fastbackward")
         return v
     }()
@@ -48,8 +53,14 @@ class Player: View {
         v.target = self
         v.action = #selector(self.handleFastForwardClick)
         v.widthAnchorToEqual(width: 30)
-//        v.heightAnchorToEqual(height: 30)
         v.image = #imageLiteral(resourceName: "icon - fastforward")
+        return v
+    }()
+    
+    private lazy var volumeSliderEl: Slider = {
+        let v = Slider()
+        v.target = self
+        v.action = #selector(self.handleVolumeSliderChange)
         return v
     }()
     
@@ -116,10 +127,22 @@ class Player: View {
         return v
     }()
     
-    private lazy var volumeSliderEl: Slider = {
-        let v = Slider()
+    
+    private lazy var repeatBtnEl: Button = {
+        let v = Button()
         v.target = self
-        v.action = #selector(self.handleVolumeSliderChange)
+        v.action = #selector(self.handleRepeatBtnClick)
+        v.image = Player.repeatImage
+        v.widthAnchorToEqual(width: 32)
+        return v
+    }()
+    
+    private lazy var shuffleBtnEl: Button = {
+        let v = Button()
+        v.target = self
+        v.action = #selector(self.handleShuffleBtnClick)
+        v.image = Player.shuffleImage
+        v.widthAnchorToEqual(width: 32)
         return v
     }()
     
@@ -158,6 +181,14 @@ class Player: View {
         self.infoSectionSliderEl.centerYAnchorToEqual(self.infoSectionTimeStartEl.centerYAnchor)
         self.infoSectionSliderEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 55)
         self.infoSectionSliderEl.rightAnchorToEqual(v.rightAnchor, constant: -55)
+        
+        v.addSubview(self.shuffleBtnEl)
+        self.shuffleBtnEl.topAnchorToEqual(v.topAnchor, constant: 10)
+        self.shuffleBtnEl.rightAnchorToEqual(v.rightAnchor, constant: -10)
+        
+        v.addSubview(self.repeatBtnEl)
+        self.repeatBtnEl.topAnchorToEqual(self.shuffleBtnEl.topAnchor)
+        self.repeatBtnEl.rightAnchorToEqual(self.shuffleBtnEl.leftAnchor, constant: -15)
         
         return v
     }()
@@ -233,6 +264,14 @@ class Player: View {
         onFastBackwardClick?()
     }
     
+    @objc private func handleRepeatBtnClick() {
+        onRepeatBtnClick?()
+    }
+    
+    @objc private func handleShuffleBtnClick() {
+        onShuffleBtnClick?()
+    }
+    
     // MARK: - API Methods
     
     public func setPlayPauseBtnElStatus(_ isPlaying: Bool = true) {
@@ -284,5 +323,15 @@ class Player: View {
     
     public func updateVolumeSlider(_ value: Double) {
         volumeSliderEl.doubleValue = value
+    }
+    
+    public func updateShuffleBtnStatus(isActive: Bool) {
+        if isActive { shuffleBtnEl.image = Player.shuffleImageActive }
+        else { shuffleBtnEl.image = Player.shuffleImage }
+    }
+    
+    public func updateRepeatBtnStatus(isActive: Bool) {
+        if isActive { repeatBtnEl.image = Player.repeatImageActive }
+        else { repeatBtnEl.image = Player.repeatImage }
     }
 }

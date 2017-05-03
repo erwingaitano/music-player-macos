@@ -77,6 +77,8 @@ class MainController: NSViewController {
         playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onFastBackwardClick: goPreviousSong, onFastForwardClick: handleFastForwardClick, onSliderChange: handleSliderChange)
         playerEl.onVolumeSliderChange = handleVolumeSliderChange
         playerEl.updateVolumeSlider(Double(playerCoreEl.volume))
+        playerEl.onRepeatBtnClick = handleRepeatBtnClick
+        playerEl.onShuffleBtnClick = handleShuffleBtnClick
         
         view.addSubview(playerEl)
         playerEl.heightAnchorToEqual(height: 100)
@@ -270,5 +272,18 @@ class MainController: NSViewController {
     
     private func handleVolumeSliderChange(value: Double) {
         playerCoreEl.volume = Float(value)
+    }
+    
+    private func handleRepeatBtnClick() {
+        shouldRepeatPlayingSongs = !shouldRepeatPlayingSongs
+        if shouldRepeatPlayingSongs {
+            playerEl.updateRepeatBtnStatus(isActive: true)
+        } else {
+            playerEl.updateRepeatBtnStatus(isActive: false)
+        }
+    }
+    
+    private func handleShuffleBtnClick() {
+    
     }
 }

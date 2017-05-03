@@ -1,9 +1,10 @@
 - volume slider
 - fix the slider styles
+- repeat playlist
 
 # TODO
-- repeat playlist
 - shuffle playlist
 - indicate the current song in the listViews
+- fix the sidebar items
 
 # DONE
