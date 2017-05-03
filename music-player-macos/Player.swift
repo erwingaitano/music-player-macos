@@ -188,7 +188,7 @@ class Player: View {
         
         v.addSubview(self.repeatBtnEl)
         self.repeatBtnEl.topAnchorToEqual(self.shuffleBtnEl.topAnchor)
-        self.repeatBtnEl.rightAnchorToEqual(self.shuffleBtnEl.leftAnchor, constant: -15)
+        self.repeatBtnEl.rightAnchorToEqual(self.shuffleBtnEl.leftAnchor, constant: -10)
         
         return v
     }()

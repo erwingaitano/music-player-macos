@@ -16,6 +16,8 @@ class MainController: NSViewController {
     private var playingListViewEl: ListView!
     private var playerEl: Player!
     private var shouldRepeatPlayingSongs = false
+    private var isShuffled = false
+    private var nonShuffledSongsPlaying: [SongModel] = []
     private var songsUpdatedObserver: NSObjectProtocol!
     private var songsPlayingUpdatedObserver: NSObjectProtocol!
     private var playlistsUpdatedObserver: NSObjectProtocol!
@@ -147,7 +149,10 @@ class MainController: NSViewController {
     }
     
     private func playPlaylist(_ songs: [SongModel]) {
+        nonShuffledSongsPlaying = songs
         AppSingleton.shared.updateSongsPlaying(songs)
+        
+        if isShuffled { shufflePlayingPlaylist() }
         
         if songs.count == 0 {
             playerCoreEl.stop()
@@ -200,6 +205,12 @@ class MainController: NSViewController {
         if let width = width { v.widthAnchorToEqual(width: width) }
         if let height = height { v.heightAnchorToEqual(height: height) }
         return v
+    }
+    
+    private func shufflePlayingPlaylist() {
+        playerEl.updateShuffleBtnStatus(isActive: true)
+        let songsShuffled = AppSingleton.shared.songsPlaying.shuffled()
+        AppSingleton.shared.updateSongsPlaying(songsShuffled)
     }
     
     private func handleSliderChange(value: Double) {
@@ -284,6 +295,13 @@ class MainController: NSViewController {
     }
     
     private func handleShuffleBtnClick() {
-    
+        isShuffled = !isShuffled
+        
+        if isShuffled {
+            shufflePlayingPlaylist()
+        } else {
+            playerEl.updateShuffleBtnStatus(isActive: false)
+            AppSingleton.shared.updateSongsPlaying(nonShuffledSongsPlaying)
+        }
     }
 }
