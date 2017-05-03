@@ -92,6 +92,7 @@ class Player: View {
         let v = Label()
         v.stringValue = "-"
         v.font = NSFont.systemFont(ofSize: 18)
+        v.cell?.lineBreakMode = .byTruncatingTail
         v.textColor = .white
         return v
     }()
@@ -100,6 +101,7 @@ class Player: View {
         let v = Label()
         v.stringValue = "-"
         v.font = NSFont.systemFont(ofSize: 14)
+        v.cell?.lineBreakMode = .byTruncatingTail
         v.textColor = .secondaryColor
         return v
     }()
@@ -150,21 +152,19 @@ class Player: View {
         let v = View()
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#222222").cgColor
         
+        v.addSubview(self.shuffleBtnEl)
+        self.shuffleBtnEl.topAnchorToEqual(v.topAnchor, constant: 10)
+        self.shuffleBtnEl.rightAnchorToEqual(v.rightAnchor, constant: -10)
+        
+        v.addSubview(self.repeatBtnEl)
+        self.repeatBtnEl.topAnchorToEqual(self.shuffleBtnEl.topAnchor)
+        self.repeatBtnEl.rightAnchorToEqual(self.shuffleBtnEl.leftAnchor, constant: -10)
+        
         v.addSubview(self.infoSectionImgEl)
         self.infoSectionImgEl.widthAnchorToEqual(anchor: self.infoSectionImgEl.heightAnchor)
         self.infoSectionImgEl.topAnchorToEqual(v.topAnchor, constant: 5)
         self.infoSectionImgEl.bottomAnchorToEqual(v.bottomAnchor, constant: -5)
         self.infoSectionImgEl.leftAnchorToEqual(v.leftAnchor, constant: 5)
-        
-        v.addSubview(self.infoSectionTitleEl)
-        self.infoSectionTitleEl.heightAnchorToEqual(height: 24)
-        self.infoSectionTitleEl.topAnchorToEqual(self.infoSectionImgEl.topAnchor, constant: 4)
-        self.infoSectionTitleEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 10)
-        
-        v.addSubview(self.infoSectionSubtitleEl)
-        self.infoSectionSubtitleEl.heightAnchorToEqual(height: 20)
-        self.infoSectionSubtitleEl.topAnchorToEqual(self.infoSectionTitleEl.bottomAnchor, constant: 0)
-        self.infoSectionSubtitleEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 10)
         
         v.addSubview(self.infoSectionTimeStartEl)
         self.infoSectionTimeStartEl.heightAnchorToEqual(height: 18)
@@ -182,13 +182,17 @@ class Player: View {
         self.infoSectionSliderEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 55)
         self.infoSectionSliderEl.rightAnchorToEqual(v.rightAnchor, constant: -55)
         
-        v.addSubview(self.shuffleBtnEl)
-        self.shuffleBtnEl.topAnchorToEqual(v.topAnchor, constant: 10)
-        self.shuffleBtnEl.rightAnchorToEqual(v.rightAnchor, constant: -10)
+        v.addSubview(self.infoSectionTitleEl)
+        self.infoSectionTitleEl.heightAnchorToEqual(height: 24)
+        self.infoSectionTitleEl.topAnchorToEqual(self.infoSectionImgEl.topAnchor, constant: 4)
+        self.infoSectionTitleEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 10)
+        self.infoSectionTitleEl.rightAnchorToEqual(self.repeatBtnEl.leftAnchor, constant: -10)
         
-        v.addSubview(self.repeatBtnEl)
-        self.repeatBtnEl.topAnchorToEqual(self.shuffleBtnEl.topAnchor)
-        self.repeatBtnEl.rightAnchorToEqual(self.shuffleBtnEl.leftAnchor, constant: -10)
+        v.addSubview(self.infoSectionSubtitleEl)
+        self.infoSectionSubtitleEl.heightAnchorToEqual(height: 20)
+        self.infoSectionSubtitleEl.topAnchorToEqual(self.infoSectionTitleEl.bottomAnchor, constant: 0)
+        self.infoSectionSubtitleEl.leftAnchorToEqual(self.infoSectionImgEl.rightAnchor, constant: 10)
+        self.infoSectionSubtitleEl.rightAnchorToEqual(self.repeatBtnEl.leftAnchor, constant: -10)
         
         return v
     }()

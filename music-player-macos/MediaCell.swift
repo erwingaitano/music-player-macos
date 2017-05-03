@@ -44,6 +44,7 @@ class MediaCell: View {
     private var titleEl: Label = {
         let v = Label()
         v.font = NSFont.systemFont(ofSize: 14)
+        v.cell?.lineBreakMode = .byTruncatingTail
         v.stringValue = "..."
         return v
     }()
@@ -52,6 +53,7 @@ class MediaCell: View {
         let v = Label()
         v.textColor = .secondaryColor
         v.font = NSFont.systemFont(ofSize: 13)
+        v.cell?.lineBreakMode = .byTruncatingTail
         v.stringValue = "..."
         return v
     }()
@@ -62,11 +64,13 @@ class MediaCell: View {
         self.titleEl.heightAnchorToEqual(height: 18)
         self.titleEl.topAnchorToEqual(v.topAnchor)
         self.titleEl.leftAnchorToEqual(v.leftAnchor)
+        self.titleEl.rightAnchorToEqual(v.rightAnchor)
         
         v.addSubview(self.subtitleEl)
         self.subtitleEl.heightAnchorToEqual(height: 18)
         self.subtitleEl.topAnchorToEqual(self.titleEl.bottomAnchor, constant: 4)
         self.subtitleEl.leftAnchorToEqual(v.leftAnchor)
+        self.subtitleEl.rightAnchorToEqual(v.rightAnchor)
         
         v.bottomAnchorToEqual(self.subtitleEl.bottomAnchor)
         
