@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7F362D55E1AC745CDD64944C /* Pods_music_player_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CF8BE9A0F5F244268306200 /* Pods_music_player_macos.framework */; };
+		AA2FE7A31EB9951F00AAC56A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FE7A21EB9951F00AAC56A /* AppDelegate.swift */; };
+		AA2FE7A51EB9959400AAC56A /* Application.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2FE7A41EB9959400AAC56A /* Application.xib */; };
 		AA45EF131EB94F74006635B3 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA45EF121EB94F74006635B3 /* ImageExtensions.swift */; };
 		AA6D14811EB415EE005DBC83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6D14801EB415EE005DBC83 /* Assets.xcassets */; };
 		AA6D14981EB4175F005DBC83 /* ApiEndpointsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6D148B1EB4175F005DBC83 /* ApiEndpointsHelpers.swift */; };
@@ -31,11 +33,12 @@
 		AA9672741EB5B62C008CE884 /* BasicExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9672731EB5B62C008CE884 /* BasicExtensions.swift */; };
 		AA9672781EB7DA03008CE884 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9672771EB7DA03008CE884 /* Sidebar.swift */; };
 		AA9672931EB907BD008CE884 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9672921EB907BD008CE884 /* Slider.swift */; };
-		AAD9DE541EB9781C00C5B088 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD9DE531EB9781C00C5B088 /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9CF8BE9A0F5F244268306200 /* Pods_music_player_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_music_player_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA2FE7A21EB9951F00AAC56A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AA2FE7A41EB9959400AAC56A /* Application.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Application.xib; sourceTree = "<group>"; };
 		AA45EF121EB94F74006635B3 /* ImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
 		AA6D147B1EB415EE005DBC83 /* music-player-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "music-player-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA6D14801EB415EE005DBC83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,7 +64,6 @@
 		AA9672731EB5B62C008CE884 /* BasicExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicExtensions.swift; sourceTree = "<group>"; };
 		AA9672771EB7DA03008CE884 /* Sidebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		AA9672921EB907BD008CE884 /* Slider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
-		AAD9DE531EB9781C00C5B088 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BDAE1AD68CC44741F47E4DB6 /* Pods-music-player-macos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music-player-macos.debug.xcconfig"; path = "Pods/Target Support Files/Pods-music-player-macos/Pods-music-player-macos.debug.xcconfig"; sourceTree = "<group>"; };
 		C2A76408B6F3800C4B6A0559 /* Pods-music-player-macos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music-player-macos.release.xcconfig"; path = "Pods/Target Support Files/Pods-music-player-macos/Pods-music-player-macos.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -99,8 +101,9 @@
 		AA6D147D1EB415EE005DBC83 /* music-player-macos */ = {
 			isa = PBXGroup;
 			children = (
-				AAD9DE531EB9781C00C5B088 /* main.swift */,
+				AA2FE7A41EB9959400AAC56A /* Application.xib */,
 				AA6D14901EB4175F005DBC83 /* MediaApplication.swift */,
+				AA2FE7A21EB9951F00AAC56A /* AppDelegate.swift */,
 				AA6D14851EB415EE005DBC83 /* Info.plist */,
 				AA6D14801EB415EE005DBC83 /* Assets.xcassets */,
 				AA6D14AA1EB417CC005DBC83 /* _singletons */,
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA2FE7A51EB9959400AAC56A /* Application.xib in Resources */,
 				AA6D14811EB415EE005DBC83 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,9 +319,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA2FE7A31EB9951F00AAC56A /* AppDelegate.swift in Sources */,
 				AA6D14AE1EB42CA0005DBC83 /* ListView.swift in Sources */,
 				AA6D14A31EB41760005DBC83 /* View.swift in Sources */,
-				AAD9DE541EB9781C00C5B088 /* main.swift in Sources */,
 				AA6D149B1EB4175F005DBC83 /* GeneralHelpers.swift in Sources */,
 				AA6D14B01EB42D20005DBC83 /* MediaCell.swift in Sources */,
 				AA9672721EB57C7C008CE884 /* Button.swift in Sources */,

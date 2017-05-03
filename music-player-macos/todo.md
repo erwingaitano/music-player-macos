@@ -1,6 +1,5 @@
 
 # TODO
-- media keys not working when creating the app manually (using main.swift)
 - better shuffle mechanism
   - when u shuffle, the song selected/playing should become first and the rest shuffled
   - when no shuffle, the song selected/playing should go to his original position
@@ -10,6 +9,7 @@
 - should be able to right click songs/playlists (even multiple selections) and add them to the current playing playlist
 - search for music/playlists
 - save music locally
+- pause sometimes not working
 
 # DONE
 - volume slider
@@ -24,3 +24,5 @@
   - pause/play song = space
   - repeat
   - shuffle
+- media keys not working when creating the app manually (using main.swift)
+  I solved this by actually using a Xib file because i couldn't make it work without it

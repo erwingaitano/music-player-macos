@@ -31,6 +31,8 @@
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Erwin GO. All rights reserved.</string>
+	<key>NSMainNibFile</key>
+	<string>Application</string>
 	<key>NSPrincipalClass</key>
 	<string>MediaApplication</string>
 </dict>
