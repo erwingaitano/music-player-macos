@@ -17,6 +17,7 @@ class MediaCell: View {
         var title: String
         var subtitle: String
         var imageUrl: String?
+        var isSpecialHighlighted: Bool
     }
     
     // MARK: - Properties
@@ -26,6 +27,7 @@ class MediaCell: View {
             titleEl.stringValue = data.title
             subtitleEl.stringValue = data.subtitle
             setImage(data.imageUrl)
+            setSpecialHighlighted(data.isSpecialHighlighted)
         }
     }
     
@@ -123,6 +125,14 @@ class MediaCell: View {
             imageEl.kf.setImage(with: URL(string: GeneralHelpers.getCoverUrl(imageUrl)))
         } else {
             imageEl.image = nil
+        }
+    }
+    
+    private func setSpecialHighlighted(_ isSpecialHighlighted: Bool) {
+        if isSpecialHighlighted {
+            containerEl.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#4ADD8C").cgColor
+        } else {
+            containerEl.layer?.backgroundColor = NSColor.clear.cgColor
         }
     }
     

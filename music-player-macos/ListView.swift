@@ -19,6 +19,7 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     private let cellId = "cellId"
     private var onItemSelected: OnItemSelected?
     private var data: [MediaCell.Data] = []
+    private var specialHighlightedCells: [String] = []
     private var scrollContainerEl: NSScrollView = {
         let v = NSScrollView()
         v.scrollerKnobStyle = .light
@@ -92,21 +93,25 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     }
     
     public func updateData(_ data: [MediaCell.Data]) {
-        self.data = data
+        self.data = data.map { el -> MediaCell.Data in
+            var newData = el
+            newData.isSpecialHighlighted = specialHighlightedCells.contains(el.id)
+            return newData
+        }
+        
         tableEl.reloadData()
     }
     
     public static func getMediaCellDataArrayFromSongModelArray(_ songs: [SongModel]) -> [MediaCell.Data] {
         return songs.map { song -> MediaCell.Data in
             let imageUrl = song.allCovers.count == 0 ? nil : song.allCovers[0]
-            return MediaCell.Data(id: song.id, title: song.name, subtitle: GeneralHelpers.getAlbumArtist(album: song.album, artist: song.artist), imageUrl: imageUrl)
+            return MediaCell.Data(id: song.id, title: song.name, subtitle: GeneralHelpers.getAlbumArtist(album: song.album, artist: song.artist), imageUrl: imageUrl, isSpecialHighlighted: false)
         }
     }
     
-    public static func getMediaCellDataArrayFromPlaylistModelArray(_ playlists: [PlaylistModel]) -> [MediaCell.Data] {
-        return playlists.map { playlist -> MediaCell.Data in
-            MediaCell.Data(id: playlist.id, title: playlist.name, subtitle: "Playlist", imageUrl: nil)
-        }
+    public func updateSpecialHighlightedCells(ids: [String]) {
+        specialHighlightedCells = ids
+        updateData(data)
     }
     
     // MARK: - Delegates

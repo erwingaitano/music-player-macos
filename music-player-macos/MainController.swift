@@ -168,12 +168,12 @@ class MainController: NSViewController {
         
         if idx < songsPlayingCount {
             AppSingleton.shared.updateCurrentSongIdx(idx)
-            updatePlayerSong(AppSingleton.shared.songsPlaying[AppSingleton.shared.currentSongIdx])
+            updatePlayingSong(AppSingleton.shared.songsPlaying[AppSingleton.shared.currentSongIdx])
             if shouldStartPlaying { playerCoreEl.play() }
             else { playerCoreEl.pause() }
         } else {
             AppSingleton.shared.updateCurrentSongIdx(0)
-            updatePlayerSong(AppSingleton.shared.songsPlaying[0])
+            updatePlayingSong(AppSingleton.shared.songsPlaying[0])
             
             var shouldRepeatPlayingSongs = self.shouldRepeatPlayingSongs
             if shouldStartPlayingSongAfterReachingEnd != nil { shouldRepeatPlayingSongs = shouldStartPlayingSongAfterReachingEnd! }
@@ -187,9 +187,11 @@ class MainController: NSViewController {
         listViewEl.updateTitle("All Songs")
     }
     
-    private func updatePlayerSong(_ song: SongModel) {
+    private func updatePlayingSong(_ song: SongModel) {
         updateSongPromiseEl?.canceler()
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
+        playingListViewEl.updateSpecialHighlightedCells(ids: [song.id])
+        listViewEl.updateSpecialHighlightedCells(ids: [song.id])
         
         updateSongPromiseEl = playerCoreEl.updateSong(id: song.id)
         _ = updateSongPromiseEl?.promise.then(execute: { _ -> Void in
