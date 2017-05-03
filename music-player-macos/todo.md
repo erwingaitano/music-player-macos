@@ -9,7 +9,10 @@
 - should be able to right click songs/playlists (even multiple selections) and add them to the current playing playlist
 - search for music/playlists
 - save music locally
-- pause sometimes not working
+- pause sometimes not working (when you focus any table and try to pause a song with space it doesnt work anymore)
+- should be able to fast forward/backward songs when the respective key is being pressed!
+- support for lyrics
+- nice visualization for the covers like in itunes (even showing lyrics!)
 
 # DONE
 - volume slider
