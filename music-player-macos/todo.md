@@ -1,15 +1,6 @@
-- volume slider
-- fix the slider styles
-- repeat playlist
-- shuffle playlist
-- fix title song text overlay on player
-- indicate the current song in the listViews
 
 # TODO
-- shortcuts for:
-  - volume up/down = cmd + up/down
-  - prev/next song = cmd + left/right
-  - pause/play song = space
+- media keys not working when creating the app manually (using main.swift)
 - better shuffle mechanism
   - when u shuffle, the song selected/playing should become first and the rest shuffled
   - when no shuffle, the song selected/playing should go to his original position
@@ -21,3 +12,15 @@
 - save music locally
 
 # DONE
+- volume slider
+- fix the slider styles
+- repeat playlist
+- shuffle playlist
+- fix title song text overlay on player
+- indicate the current song in the listViews
+- shortcuts for:
+  - volume up/down = cmd + up/down
+  - prev/next song = cmd + left/right
+  - pause/play song = space
+  - repeat
+  - shuffle

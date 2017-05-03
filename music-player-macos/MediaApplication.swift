@@ -25,6 +25,7 @@ class MediaApplication: NSApplication {
     
     func mediaKeyEvent(key: Int32, state: Bool, keyRepeat: Bool) {
         // Only send events on KeyDown. Without this check, these events will happen twice
+        Swift.print(1111111111)
         if (state) {
             switch(key) {
             case NX_KEYTYPE_PLAY:

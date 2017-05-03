@@ -18,9 +18,7 @@ class MainController: NSViewController {
     private var shouldRepeatPlayingSongs = false
     private var isShuffled = false
     private var nonShuffledSongsPlaying: [SongModel] = []
-    private var songsUpdatedObserver: NSObjectProtocol!
-    private var songsPlayingUpdatedObserver: NSObjectProtocol!
-    private var playlistsUpdatedObserver: NSObjectProtocol!
+    private var observers: [NSObjectProtocol] = []
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
     private var getPlaylistSongsPromiseEl: ApiEndpointsHelpers.SongsPromiseEl?
     
@@ -43,11 +41,19 @@ class MainController: NSViewController {
         view.layer?.backgroundColor = NSColor.black.cgColor
         view.layer?.addSublayer(AVPlayerLayer(player: playerCoreEl))
         
-        songsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated)
-        playlistsUpdatedObserver = NotificationCenter.default.addObserver(forName: .customPlaylistsUpdated, object: nil, queue: nil, using: handlePlaylistsUpdated)
-        songsPlayingUpdatedObserver = NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated)
+        observers.append(NotificationCenter.default.addObserver(forName: .customSongsUpdated, object: nil, queue: nil, using: handleSongsUpdated))
+        observers.append(NotificationCenter.default.addObserver(forName: .customPlaylistsUpdated, object: nil, queue: nil, using: handlePlaylistsUpdated))
+        observers.append(NotificationCenter.default.addObserver(forName: .customSongsPlayingUpdated, object: nil, queue: nil, using: handleSongsPlayingUpdated))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuPlayPauseFired, object: nil, queue: nil, using: handleMenuPlayPauseFired))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuNextFired, object: nil, queue: nil, using: handleMenuNextFired))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuPreviousFired, object: nil, queue: nil, using: handleMenuPreviousFired))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuIncreaseVolumeFired, object: nil, queue: nil, using: handleMenuIncreaseVolumeFired))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuDecreaseVolumeFired, object: nil, queue: nil, using: handleMenuDecreaseVolumeFired))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuRepeatFired, object: nil, queue: nil, using: handleMenuRepeatFired))
+        observers.append(NotificationCenter.default.addObserver(forName: .customMenuShuffleFired, object: nil, queue: nil, using: handleMenuShuffleFired))
+        
         NotificationCenter.default.addObserver(self, selector: #selector(togglePlayPause), name: .customPlayPauseMediaKeyPressed, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleFastForwardClick), name: .customFastForwardMediaKeyPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(goNextSongFastForward), name: .customFastForwardMediaKeyPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(goPreviousSong), name: .customFastBackwardMediaKeyPressed, object: nil)
         
         initViews()
@@ -62,9 +68,7 @@ class MainController: NSViewController {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(songsUpdatedObserver)
-        NotificationCenter.default.removeObserver(playlistsUpdatedObserver)
-        NotificationCenter.default.removeObserver(songsPlayingUpdatedObserver)
+        observers.forEach { NotificationCenter.default.removeObserver($0) }
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -76,7 +80,7 @@ class MainController: NSViewController {
         title.font = NSFont.systemFont(ofSize: 18)
         title.textColor = .blue
         
-        playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onFastBackwardClick: goPreviousSong, onFastForwardClick: handleFastForwardClick, onSliderChange: handleSliderChange)
+        playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onFastBackwardClick: goPreviousSong, onFastForwardClick: goNextSongFastForward, onSliderChange: handleSliderChange)
         playerEl.onVolumeSliderChange = handleVolumeSliderChange
         playerEl.updateVolumeSlider(Double(playerCoreEl.volume))
         playerEl.onRepeatBtnClick = handleRepeatBtnClick
@@ -215,6 +219,26 @@ class MainController: NSViewController {
         AppSingleton.shared.updateSongsPlaying(songsShuffled)
     }
     
+    private func toggleRepeat() {
+        shouldRepeatPlayingSongs = !shouldRepeatPlayingSongs
+        if shouldRepeatPlayingSongs {
+            playerEl.updateRepeatBtnStatus(isActive: true)
+        } else {
+            playerEl.updateRepeatBtnStatus(isActive: false)
+        }
+    }
+    
+    private func toggleShuffle() {
+        isShuffled = !isShuffled
+        
+        if isShuffled {
+            shufflePlayingPlaylist()
+        } else {
+            playerEl.updateShuffleBtnStatus(isActive: false)
+            AppSingleton.shared.updateSongsPlaying(nonShuffledSongsPlaying)
+        }
+    }
+    
     private func handleSliderChange(value: Double) {
         playerCoreEl.setTime(time: value)
     }
@@ -259,7 +283,7 @@ class MainController: NSViewController {
         playingListViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songsPlaying))
     }
     
-    @objc private func handleFastForwardClick() {
+    @objc private func goNextSongFastForward() {
         playPlaylistSongAtIndex(AppSingleton.shared.currentSongIdx + 1, shouldStartPlaying: playerCoreEl.isPlaying, shouldStartPlayingSongAfterReachingEnd: true)
     }
     
@@ -288,22 +312,50 @@ class MainController: NSViewController {
     }
     
     private func handleRepeatBtnClick() {
-        shouldRepeatPlayingSongs = !shouldRepeatPlayingSongs
-        if shouldRepeatPlayingSongs {
-            playerEl.updateRepeatBtnStatus(isActive: true)
-        } else {
-            playerEl.updateRepeatBtnStatus(isActive: false)
-        }
+        toggleRepeat()
     }
     
     private func handleShuffleBtnClick() {
-        isShuffled = !isShuffled
+        toggleShuffle()
+    }
+    
+    private func handleMenuPlayPauseFired(_: Notification) {
+        togglePlayPause()
+    }
+    
+    private func handleMenuNextFired(_: Notification) {
+        goNextSongFastForward()
+    }
+    
+    private func handleMenuPreviousFired(_: Notification) {
+        goPreviousSong()
+    }
+    
+    private func handleMenuDecreaseVolumeFired(_: Notification) {
+        var newVolume = playerCoreEl.volume
+        newVolume -= 1 / 20
         
-        if isShuffled {
-            shufflePlayingPlaylist()
-        } else {
-            playerEl.updateShuffleBtnStatus(isActive: false)
-            AppSingleton.shared.updateSongsPlaying(nonShuffledSongsPlaying)
-        }
+        if newVolume < 0 { newVolume = 0 }
+        playerCoreEl.volume = newVolume
+        
+        playerEl.updateVolumeSlider(Double(newVolume))
+    }
+    
+    private func handleMenuIncreaseVolumeFired(_: Notification) {
+        var newVolume = playerCoreEl.volume
+        newVolume += 1 / 20
+        
+        if newVolume > 1 { newVolume = 1 }
+        playerCoreEl.volume = newVolume
+        
+        playerEl.updateVolumeSlider(Double(newVolume))
+    }
+    
+    private func handleMenuRepeatFired(_: Notification) {
+        toggleRepeat()
+    }
+    
+    private func handleMenuShuffleFired(_: Notification) {
+        toggleShuffle()
     }
 }
