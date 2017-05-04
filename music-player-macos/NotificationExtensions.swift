@@ -15,7 +15,7 @@ extension Notification.Name {
     static let customSongsUpdated = Notification.Name("customSongsUpdated")
     static let customPlaylistsUpdated = Notification.Name("customPlaylistsUpdated")
     static let customSongsPlayingUpdated = Notification.Name("customSongsPlayingUpdated")
-    static let customCurrentSongIdxUpdated = Notification.Name("customCurrentSongIdxUpdated")
+    static let customCurrentSongIdUpdated = Notification.Name("customCurrentSongIdUpdated")
     static let customMenuPlayPauseFired = Notification.Name("customMenuPlayPauseFired")
     static let customMenuPreviousFired = Notification.Name("customMenuPreviousFired")
     static let customMenuNextFired = Notification.Name("customMenuNextFired")

@@ -13,7 +13,7 @@ class AppSingleton {
     public let apiUrl = "http://localhost:3000/api"
     public private(set) var songs: [SongModel] = []
     public private(set) var songsPlaying: [SongModel] = []
-    public private(set) var currentSongIdx: Int = 0
+    public private(set) var currentSongId: String = ""
     public private(set) var playlists: [PlaylistModel] = []
     
     public func updateSongs() {
@@ -35,8 +35,8 @@ class AppSingleton {
         NotificationCenter.default.post(name: .customSongsPlayingUpdated, object: nil)
     }
     
-    public func updateCurrentSongIdx(_ idx: Int) {
-        currentSongIdx = idx
-        NotificationCenter.default.post(name: .customCurrentSongIdxUpdated, object: nil)
+    public func updateCurrentSong(_ songId: String) {
+        currentSongId = songId
+        NotificationCenter.default.post(name: .customCurrentSongIdUpdated, object: nil)
     }
 }
