@@ -1,8 +1,14 @@
-
-# TODO
 - better shuffle mechanism
   - when u shuffle, the song selected/playing should become first and the rest shuffled
+    (not really, i prefer how it is now)
   - when no shuffle, the song selected/playing should go to his original position
+  - play next song should always play the next song showed in the playing songs listview
+
+# TODO
+- the app should remember its last status whenever it launches:
+  - save shuffle/repeat options
+  - playlist view
+
 - fix the sidebar items
 - should be able to remove songs from the playlist
 - should be able to rearrange songs in the paylists

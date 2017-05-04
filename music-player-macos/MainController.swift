@@ -203,6 +203,7 @@ class MainController: NSViewController {
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
         playingListViewEl.updateSpecialHighlightedCells(ids: [song.id])
         listViewEl.updateSpecialHighlightedCells(ids: [song.id])
+        playingListViewEl.scrollToCell(withId: song.id)
         
         updateSongPromiseEl = playerCoreEl.updateSong(id: song.id)
         _ = updateSongPromiseEl?.promise.then(execute: { _ -> Void in
@@ -244,6 +245,8 @@ class MainController: NSViewController {
             playerEl.updateShuffleBtnStatus(isActive: false)
             AppSingleton.shared.updateSongsPlaying(nonShuffledSongsPlaying)
         }
+        
+        playingListViewEl.scrollToCell(withId: AppSingleton.shared.currentSongId)
     }
     
     private func handleSliderChange(value: Double) {

@@ -114,6 +114,13 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
         updateData(data)
     }
     
+    public func scrollToCell(withId id: String) {
+        guard let idx = data.index(where: { $0.id == id }) else { return }
+        tableEl.scrollRowToVisible(0)
+        let gap = data.count - 1 - idx
+        tableEl.scrollRowToVisible(gap < 3 ? idx + gap : idx + 3)
+    }
+    
     // MARK: - Delegates
     
     func numberOfRows(in tableView: NSTableView) -> Int {
