@@ -110,10 +110,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mainWindowContentView.addSubview(mainController.view)
         mainController.view.allEdgeAnchorsToEqual(mainWindowContentView)
         
+        initSongsPlaylists()
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+    }
+    
+    private func initSongsPlaylists() {
+        AppSingleton.shared.updateSongs()
+        AppSingleton.shared.updatePlaylists()
     }
     
     // MARK: - API Methods

@@ -163,4 +163,3 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
 //        onItemSelected?(data[indexPath.row])
 //    }
 }
-

@@ -49,10 +49,27 @@ class GeneralHelpers {
     }
     
     public static func getCoverUrl(_ url: String) -> String {
-        return "\(AppSingleton.shared.apiUrl)\(url)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
+        return "\(AppSingleton.shared.mediaFolderPath)\(url)"
+//        return "\(AppSingleton.shared.mediaFolderPath)\(url)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
+    }
+    
+    public static func getSongDirPathFromSongKeyname(_ keyname: String) -> String? {
+        let objects = keyname.components(separatedBy: "~")
+        var dirPath: String?
+        
+        if objects.count == 2 {
+            dirPath = "\(AppSingleton.shared.mediaFolderPath)/_artists/\(objects[0])/\(objects[1])"
+        } else if objects.count == 3 {
+            dirPath = "\(AppSingleton.shared.mediaFolderPath)/_artists/\(objects[0])/_albums/\(objects[1])/\(objects[2])"
+        }
+        
+        return dirPath
     }
     
     public static func getSongUrl(id: String) -> URL? {
-        return URL(string: "\(AppSingleton.shared.apiUrl)/songs/\(id)/file")
+        guard let song = AppSingleton.shared.songs.first(where: { $0.id == id }) else { return nil }
+        guard let songExtension = song.ext else { return nil }
+        guard let songDirPath = getSongDirPathFromSongKeyname(song.keyname) else { return nil }
+        return URL(fileURLWithPath: "\(songDirPath)/file\(songExtension)")
     }
 }

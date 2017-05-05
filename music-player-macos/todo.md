@@ -3,8 +3,13 @@
     (not really, i prefer how it is now)
   - when no shuffle, the song selected/playing should go to his original position
   - play next song should always play the next song showed in the playing songs listview
+- you should not use internet to load songs!!!!
 
 # TODO
+- should load playlists/songs when launching app
+- should add a sync button
+- fix the green background on selected cell so text is readable, may also look for the red color on black
+- find music
 - the app should remember its last status whenever it launches:
   - save shuffle/repeat options
   - playlist view

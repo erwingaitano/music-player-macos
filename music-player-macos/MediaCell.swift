@@ -122,7 +122,7 @@ class MediaCell: View {
     
     private func setImage(_ imageUrl: String?) {
         if let imageUrl = imageUrl {
-            imageEl.kf.setImage(with: URL(string: GeneralHelpers.getCoverUrl(imageUrl)))
+            imageEl.image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(imageUrl))
         } else {
             imageEl.image = nil
         }

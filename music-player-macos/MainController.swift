@@ -57,10 +57,8 @@ class MainController: NSViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(goPreviousSong), name: .customFastBackwardMediaKeyPressed, object: nil)
         
         initViews()
-        
         showAllSongs()
-        AppSingleton.shared.updateSongs()
-        AppSingleton.shared.updatePlaylists()
+        showAllPlaylists()
     }
     
     required init?(coder: NSCoder) {
@@ -198,6 +196,10 @@ class MainController: NSViewController {
         listViewEl.updateTitle("All Songs")
     }
     
+    private func showAllPlaylists() {
+        sidebarEl.updatePlaylists(AppSingleton.shared.playlists)
+    }
+    
     private func updatePlayingSong(_ song: SongModel) {
         updateSongPromiseEl?.canceler()
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
@@ -286,7 +288,7 @@ class MainController: NSViewController {
     }
     
     private func handlePlaylistsUpdated(_: Notification) {
-        sidebarEl.updatePlaylists(AppSingleton.shared.playlists)
+        showAllPlaylists()
     }
     
     private func handleSongsPlayingUpdated(_: Notification) {

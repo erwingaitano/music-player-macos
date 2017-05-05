@@ -11,6 +11,7 @@ import Cocoa
 class AppSingleton {
     public static let shared = AppSingleton()
     public let apiUrl = "http://localhost:3000/api"
+    public let mediaFolderPath = "/Users/erwin/Music/music-player-files/_media"
     public private(set) var songs: [SongModel] = []
     public private(set) var songsPlaying: [SongModel] = []
     public private(set) var currentSongId: String = ""

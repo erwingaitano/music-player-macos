@@ -47,21 +47,17 @@ class PlayerCover: View {
     // MARK: - Private Methods
     
     private func changeCover(shouldRemoveCover: Bool = false) {
-        imageViewEl.kf.cancelDownloadTask()
-        
         if shouldRemoveCover {
             self.imageViewEl.layer?.addSublayer(self.coverGradientEl)
             self.imageViewEl.image = nil
             return
         }
         
-        imageViewEl.kf.setImage(with: URL(string: GeneralHelpers.getCoverUrl(coverUrls[coverToRotateIdx])), placeholder: self.imageViewEl.image, completionHandler: { (image, error, _, _) in
-            if image != nil && error == nil {
-                self.coverGradientEl.removeFromSuperlayer()
-            } else {
-                self.imageViewEl.layer?.addSublayer(self.coverGradientEl)
-            }
-        })
+        if let image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(coverUrls[coverToRotateIdx])) {
+            imageViewEl.image = image
+        } else {
+            self.imageViewEl.layer?.addSublayer(self.coverGradientEl)
+        }
     }
     
     @objc private func handleCoverTimer() {
