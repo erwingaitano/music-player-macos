@@ -6,6 +6,8 @@
 - you should not use internet to load songs!!!!
 - fix the green background on selected cell so text is readable, may also look for the red color on black
   (nah, it's ok)
+- the app should remember its last status whenever it launches:
+  - save shuffle/repeat options
 
 # TODO
 - should load playlists/songs when launching app
@@ -13,6 +15,7 @@
 - find music
 - the app should remember its last status whenever it launches:
   - save shuffle/repeat options
+- the app should remember its last status whenever it launches:
   - playlist view
 
 - fix the sidebar items

@@ -15,8 +15,6 @@ class MainController: NSViewController {
     private var listViewEl: ListView!
     private var playingListViewEl: ListView!
     private var playerEl: Player!
-    private var shouldRepeatPlayingSongs = false
-    private var isShuffled = false
     private var nonShuffledSongsPlaying: [SongModel] = []
     private var observers: [NSObjectProtocol] = []
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
@@ -83,6 +81,8 @@ class MainController: NSViewController {
         playerEl.updateVolumeSlider(Double(playerCoreEl.volume))
         playerEl.onRepeatBtnClick = handleRepeatBtnClick
         playerEl.onShuffleBtnClick = handleShuffleBtnClick
+        playerEl.updateRepeatBtnStatus(isActive: AppSingleton.shared.shouldRepeatPlayingSongs)
+        playerEl.updateShuffleBtnStatus(isActive: AppSingleton.shared.shouldShuffleSongs)
         
         view.addSubview(playerEl)
         playerEl.heightAnchorToEqual(height: 100)
@@ -160,7 +160,7 @@ class MainController: NSViewController {
         
         if newSongIdxInCurrentPlaylist >= AppSingleton.shared.songsPlaying.count {
             newSongIdxInCurrentPlaylist = 0
-            shouldPlaySong = self.shouldRepeatPlayingSongs
+            shouldPlaySong = AppSingleton.shared.shouldRepeatPlayingSongs
             if shouldStartPlayingSongAfterReachingEnd != nil { shouldPlaySong = shouldStartPlayingSongAfterReachingEnd! }
         }
         
@@ -172,7 +172,7 @@ class MainController: NSViewController {
         nonShuffledSongsPlaying = songs
         AppSingleton.shared.updateSongsPlaying(songs)
         
-        if isShuffled { shufflePlayingPlaylist() }
+        if AppSingleton.shared.shouldShuffleSongs { shufflePlayingPlaylist() }
         
         if songs.count == 0 {
             playerCoreEl.stop()
@@ -230,7 +230,8 @@ class MainController: NSViewController {
     }
     
     private func toggleRepeat() {
-        shouldRepeatPlayingSongs = !shouldRepeatPlayingSongs
+        let shouldRepeatPlayingSongs = !AppSingleton.shared.shouldRepeatPlayingSongs
+        AppSingleton.shared.updateShouldRepeatPlayingSongs(shouldRepeatPlayingSongs)
         if shouldRepeatPlayingSongs {
             playerEl.updateRepeatBtnStatus(isActive: true)
         } else {
@@ -239,7 +240,8 @@ class MainController: NSViewController {
     }
     
     private func toggleShuffle() {
-        isShuffled = !isShuffled
+        let isShuffled = !AppSingleton.shared.shouldShuffleSongs
+        AppSingleton.shared.updateShouldShuffleSongs(isShuffled)
         
         if isShuffled {
             shufflePlayingPlaylist()

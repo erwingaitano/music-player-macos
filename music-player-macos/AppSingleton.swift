@@ -16,6 +16,8 @@ class AppSingleton {
     public private(set) var songsPlaying: [SongModel] = []
     public private(set) var currentSongId: String = ""
     public private(set) var playlists: [PlaylistModel] = []
+    public private(set) var shouldRepeatPlayingSongs = UserDefaults.standard.bool(forKey: "shouldRepeatPlayingSongs")
+    public private(set) var shouldShuffleSongs = UserDefaults.standard.bool(forKey: "shouldShuffleSongs")
     
     public func updateSongs() {
         _ = ApiEndpointsHelpers.getSongs().promise.then(execute: { songs -> Void in
@@ -39,5 +41,15 @@ class AppSingleton {
     public func updateCurrentSong(_ songId: String) {
         currentSongId = songId
         NotificationCenter.default.post(name: .customCurrentSongIdUpdated, object: nil)
+    }
+    
+    public func updateShouldRepeatPlayingSongs(_ val: Bool) {
+        UserDefaults.standard.set(val, forKey: "shouldRepeatPlayingSongs")
+        shouldRepeatPlayingSongs = val
+    }
+    
+    public func updateShouldShuffleSongs(_ val: Bool) {
+        UserDefaults.standard.set(val, forKey: "shouldShuffleSongs")
+        shouldShuffleSongs = val
     }
 }
