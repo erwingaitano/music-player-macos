@@ -178,7 +178,7 @@ class MainController: NSViewController {
             playerCoreEl.stop()
             playerEl.emptySongInfo()
         } else {
-            playPlaylistSong(id: songs[0].id, shouldStartPlaying: true)
+            playPlaylistSong(id: AppSingleton.shared.songsPlaying[0].id, shouldStartPlaying: true)
         }
     }
     
