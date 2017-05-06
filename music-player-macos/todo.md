@@ -14,9 +14,9 @@
 - do notifications
 - add an app icon
 - change app name to mmmmmmmmmmmmmmmm: Media Player
+- make the app icon a litle smaller
 
 # TODO
-- make the app icon a litle smaller
 - do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button
