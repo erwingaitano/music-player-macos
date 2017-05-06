@@ -48,7 +48,27 @@ class ImageView: NSImageView {
         fatalError("init(pasteboardPropertyList:ofType:) has not been implemented")
     }
     
+    // MARK: - Life Cycles
+
+    override func draw(_ dirtyRect: NSRect) {
+        frame.size = dirtyRect.size
+        setImageAsSizeCover()
+        super.draw(dirtyRect)
+    }
+    
     // MARK: - Private Methods
+    
+    private func setImageAsSizeCover() {
+        guard let image = image else { return }
+        
+        let imageRealSize = getRealImageSize(image)
+        image.size = getImageSizeToCoverContainer(imageSize: imageRealSize, containerSize: frame.size)
+        
+        // TODO: is this cacheMode necessary?
+        //        image.cacheMode = .never
+        imageScaling = .scaleNone
+        imageAlignment = .alignCenter
+    }
     
     private func getRealImageSize(_ image: NSImage) -> NSSize {
         var imageRealSize = image.size
@@ -61,18 +81,6 @@ class ImageView: NSImageView {
         })
         
         return imageRealSize
-    }
-
-    private func setImageAsSizeCover() {
-        guard let image = image else { return }
-
-        let imageRealSize = getRealImageSize(image)
-        image.size = getImageSizeToCoverContainer(imageSize: imageRealSize, containerSize: layer!.frame.size)
-        
-        // TODO: is this cacheMode necessary?
-//        image.cacheMode = .never
-        imageScaling = .scaleNone
-        imageAlignment = .alignCenter
     }
     
     private func getImageSizeToCoverContainer(imageSize: NSSize, containerSize: NSSize) -> NSSize {
