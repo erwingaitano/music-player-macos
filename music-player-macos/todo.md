@@ -8,10 +8,12 @@
   (nah, it's ok)
 - the app should remember its last status whenever it launches:
   - save shuffle/repeat options
-
-# TODO
 - fix the player cover
 - the app should remember the volume last status
+
+# TODO
+- when u double click on a song in the middle table, it should populate the playing with those songs
+- do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button
 - find music

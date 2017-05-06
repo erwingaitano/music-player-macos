@@ -18,6 +18,7 @@ class AppSingleton {
     public private(set) var playlists: [PlaylistModel] = []
     public private(set) var shouldRepeatPlayingSongs = UserDefaults.standard.bool(forKey: "shouldRepeatPlayingSongs")
     public private(set) var shouldShuffleSongs = UserDefaults.standard.bool(forKey: "shouldShuffleSongs")
+    public private(set) var volume = UserDefaults.standard.float(forKey: "volume")
     
     public func updateSongs() {
         _ = ApiEndpointsHelpers.getSongs().promise.then(execute: { songs -> Void in
@@ -51,5 +52,10 @@ class AppSingleton {
     public func updateShouldShuffleSongs(_ val: Bool) {
         UserDefaults.standard.set(val, forKey: "shouldShuffleSongs")
         shouldShuffleSongs = val
+    }
+    
+    public func updateVolume(_ volume: Float) {
+        UserDefaults.standard.set(volume, forKey: "volume")
+        self.volume = volume
     }
 }

@@ -78,7 +78,8 @@ class MainController: NSViewController {
         
         playerEl = Player(onPlayPauseBtnClick: togglePlayPause, onFastBackwardClick: goPreviousSong, onFastForwardClick: goNextSongFastForward, onSliderChange: handleSliderChange)
         playerEl.onVolumeSliderChange = handleVolumeSliderChange
-        playerEl.updateVolumeSlider(Double(playerCoreEl.volume))
+        playerCoreEl.volume = AppSingleton.shared.volume
+        playerEl.updateVolumeSlider(Double(AppSingleton.shared.volume))
         playerEl.onRepeatBtnClick = handleRepeatBtnClick
         playerEl.onShuffleBtnClick = handleShuffleBtnClick
         playerEl.updateRepeatBtnStatus(isActive: AppSingleton.shared.shouldRepeatPlayingSongs)
@@ -253,6 +254,12 @@ class MainController: NSViewController {
         playingListViewEl.scrollToCell(withId: AppSingleton.shared.currentSongId)
     }
     
+    private func updateVolume(_ volume: Float) {
+        playerCoreEl.volume = volume
+        playerEl.updateVolumeSlider(Double(volume))
+        AppSingleton.shared.updateVolume(volume)
+    }
+    
     private func handleSliderChange(value: Double) {
         playerCoreEl.setTime(time: value)
     }
@@ -322,7 +329,7 @@ class MainController: NSViewController {
     }
     
     private func handleVolumeSliderChange(value: Double) {
-        playerCoreEl.volume = Float(value)
+        updateVolume(Float(value))
     }
     
     private func handleRepeatBtnClick() {
@@ -346,23 +353,19 @@ class MainController: NSViewController {
     }
     
     private func handleMenuDecreaseVolumeFired(_: Notification) {
-        var newVolume = playerCoreEl.volume
+        var newVolume = AppSingleton.shared.volume
         newVolume -= 1 / 20
         
         if newVolume < 0 { newVolume = 0 }
-        playerCoreEl.volume = newVolume
-        
-        playerEl.updateVolumeSlider(Double(newVolume))
+        updateVolume(newVolume)
     }
     
     private func handleMenuIncreaseVolumeFired(_: Notification) {
-        var newVolume = playerCoreEl.volume
+        var newVolume = AppSingleton.shared.volume
         newVolume += 1 / 20
         
         if newVolume > 1 { newVolume = 1 }
-        playerCoreEl.volume = newVolume
-        
-        playerEl.updateVolumeSlider(Double(newVolume))
+        updateVolume(newVolume)
     }
     
     private func handleMenuRepeatFired(_: Notification) {
