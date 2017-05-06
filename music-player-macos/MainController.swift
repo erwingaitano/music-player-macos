@@ -151,7 +151,7 @@ class MainController: NSViewController {
         playPlaylistSong(id: newSong.id, shouldStartPlaying: playerCoreEl.isPlaying)
     }
     
-    private func goNextSong(shouldStartPlayingSongAfterReachingEnd: Bool? = nil) {
+    private func goNextSong(shouldStartPlayingSongAfterReachingEnd: Bool? = nil, shouldStartPlayingSongAfterReachingEndDependingOnIfItsCurrentlyPlaying: Bool? = nil) {
         let idx = AppSingleton.shared.songsPlaying.index(where: { $0.id == AppSingleton.shared.currentSongId })
         guard var newSongIdxInCurrentPlaylist = idx else { return }
         
@@ -163,13 +163,16 @@ class MainController: NSViewController {
             newSongIdxInCurrentPlaylist = 0
             shouldPlaySong = AppSingleton.shared.shouldRepeatPlayingSongs
             if shouldStartPlayingSongAfterReachingEnd != nil { shouldPlaySong = shouldStartPlayingSongAfterReachingEnd! }
+            if shouldStartPlayingSongAfterReachingEndDependingOnIfItsCurrentlyPlaying != nil {
+                shouldPlaySong = shouldStartPlayingSongAfterReachingEndDependingOnIfItsCurrentlyPlaying! && playerCoreEl.isPlaying
+            }
         }
         
         newSong = AppSingleton.shared.songsPlaying[newSongIdxInCurrentPlaylist]
         playPlaylistSong(id: newSong.id, shouldStartPlaying: shouldPlaySong)
     }
     
-    private func playPlaylist(_ songs: [SongModel]) {
+    private func playPlaylist(_ songs: [SongModel], startWithSongId songId: String? = nil) {
         nonShuffledSongsPlaying = songs
         AppSingleton.shared.updateSongsPlaying(songs)
         
@@ -179,7 +182,7 @@ class MainController: NSViewController {
             playerCoreEl.stop()
             playerEl.emptySongInfo()
         } else {
-            playPlaylistSong(id: AppSingleton.shared.songsPlaying[0].id, shouldStartPlaying: true)
+            playPlaylistSong(id: songId ?? AppSingleton.shared.songsPlaying[0].id, shouldStartPlaying: true)
         }
     }
     
@@ -192,9 +195,14 @@ class MainController: NSViewController {
         else { playerCoreEl.pause() }
     }
     
+    private func updateListViewWith(title: String, songs: [SongModel]) {
+        AppSingleton.shared.updateExploreSongsAndTitle(title: title, songs: songs)
+        listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(songs))
+        listViewEl.updateTitle(title)
+    }
+    
     @objc private func showAllSongs() {
-        listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(AppSingleton.shared.songs))
-        listViewEl.updateTitle("All Songs")
+        updateListViewWith(title: "All Songs", songs: AppSingleton.shared.songs)
     }
     
     private func showAllPlaylists() {
@@ -283,8 +291,7 @@ class MainController: NSViewController {
     }
 
     private func handleListItemSelected(item: MediaCell.Data) {
-        let song = AppSingleton.shared.songs.first(where: { $0.id == item.id })!
-        playPlaylist([song])
+        playPlaylist(AppSingleton.shared.exploreSongs, startWithSongId: item.id)
     }
     
     private func handlePlayingListItemSelected(item: MediaCell.Data) {
@@ -305,7 +312,7 @@ class MainController: NSViewController {
     }
     
     @objc private func goNextSongFastForward() {
-        goNextSong()
+        goNextSong(shouldStartPlayingSongAfterReachingEndDependingOnIfItsCurrentlyPlaying: true)
     }
     
     private func handleSidebarItemClick(type: Sidebar.Kind, id: String) {
@@ -318,11 +325,11 @@ class MainController: NSViewController {
         case .playlists:
             getPlaylistSongsPromiseEl?.canceler()
             playPlaylist([])
-            listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray([]))
+            updateListViewWith(title: "Playlist Songs", songs: [])
             listViewEl.updateTitle("Playlist Songs")
             getPlaylistSongsPromiseEl = ApiEndpointsHelpers.getPlaylistSongs(id)
             _ = getPlaylistSongsPromiseEl!.promise.then(execute: { songs -> Void in
-                self.listViewEl.updateData(ListView.getMediaCellDataArrayFromSongModelArray(songs))
+                self.updateListViewWith(title: "Playlist Songs", songs: songs)
                 self.playPlaylist(songs)
             })
         }

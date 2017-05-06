@@ -18,7 +18,7 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     
     private let cellId = "cellId"
     private var onItemSelected: OnItemSelected?
-    private var data: [MediaCell.Data] = []
+    private(set) var data: [MediaCell.Data] = []
     private var specialHighlightedCells: [String] = []
     private var scrollContainerEl: NSScrollView = {
         let v = NSScrollView()

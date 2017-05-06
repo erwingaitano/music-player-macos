@@ -58,18 +58,6 @@ class ImageView: NSImageView {
     
     // MARK: - Private Methods
     
-    private func setImageAsSizeCover() {
-        guard let image = image else { return }
-        
-        let imageRealSize = getRealImageSize(image)
-        image.size = getImageSizeToCoverContainer(imageSize: imageRealSize, containerSize: frame.size)
-        
-        // TODO: is this cacheMode necessary?
-        //        image.cacheMode = .never
-        imageScaling = .scaleNone
-        imageAlignment = .alignCenter
-    }
-    
     private func getRealImageSize(_ image: NSImage) -> NSSize {
         var imageRealSize = image.size
         
@@ -95,5 +83,14 @@ class ImageView: NSImageView {
         }
         
         return NSSize(width: newImageWidth, height: newImageHeight)
+    }
+    
+    private func setImageAsSizeCover() {
+        guard let image = image else { return }
+        
+        let imageRealSize = getRealImageSize(image)
+        image.size = getImageSizeToCoverContainer(imageSize: imageRealSize, containerSize: frame.size)
+        imageScaling = .scaleNone
+        imageAlignment = .alignCenter
     }
 }

@@ -10,9 +10,9 @@
   - save shuffle/repeat options
 - fix the player cover
 - the app should remember the volume last status
+- when u double click on a song in the middle table, it should populate the playing list with those songs
 
 # TODO
-- when u double click on a song in the middle table, it should populate the playing with those songs
 - do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button

@@ -14,6 +14,8 @@ class AppSingleton {
     public let mediaFolderPath = "/Users/erwin/Music/music-player-files/_media"
     public private(set) var songs: [SongModel] = []
     public private(set) var songsPlaying: [SongModel] = []
+    public private(set) var exploreSongs: [SongModel] = []
+    public private(set) var exploreSongsTitle = ""
     public private(set) var currentSongId: String = ""
     public private(set) var playlists: [PlaylistModel] = []
     public private(set) var shouldRepeatPlayingSongs = UserDefaults.standard.bool(forKey: "shouldRepeatPlayingSongs")
@@ -57,5 +59,10 @@ class AppSingleton {
     public func updateVolume(_ volume: Float) {
         UserDefaults.standard.set(volume, forKey: "volume")
         self.volume = volume
+    }
+    
+    public func updateExploreSongsAndTitle(title: String, songs: [SongModel]) {
+        exploreSongsTitle = title
+        exploreSongs = songs
     }
 }
