@@ -13,8 +13,10 @@
 - when u double click on a song in the middle table, it should populate the playing list with those songs
 - do notifications
 - add an app icon
+- change app name to mmmmmmmmmmmmmmmm: Media Player
 
 # TODO
+- make the app icon a litle smaller
 - do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button

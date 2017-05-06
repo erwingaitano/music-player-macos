@@ -41,7 +41,7 @@
 		AA2FE7A21EB9951F00AAC56A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA2FE7A41EB9959400AAC56A /* Application.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Application.xib; sourceTree = "<group>"; };
 		AA45EF121EB94F74006635B3 /* ImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
-		AA6D147B1EB415EE005DBC83 /* music-player-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "music-player-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA6D147B1EB415EE005DBC83 /* Media Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Media Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA6D14801EB415EE005DBC83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA6D14851EB415EE005DBC83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA6D148B1EB4175F005DBC83 /* ApiEndpointsHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiEndpointsHelpers.swift; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 		AA6D147C1EB415EE005DBC83 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA6D147B1EB415EE005DBC83 /* music-player-macos.app */,
+				AA6D147B1EB415EE005DBC83 /* Media Player.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -219,7 +219,7 @@
 			);
 			name = "music-player-macos";
 			productName = "music-player-macos";
-			productReference = AA6D147B1EB415EE005DBC83 /* music-player-macos.app */;
+			productReference = AA6D147B1EB415EE005DBC83 /* Media Player.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -452,7 +452,7 @@
 				INFOPLIST_FILE = "music-player-macos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "co.erwingo.music-player-macos";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Media Player";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -467,7 +467,7 @@
 				INFOPLIST_FILE = "music-player-macos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "co.erwingo.music-player-macos";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Media Player";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
