@@ -12,9 +12,9 @@
 - the app should remember the volume last status
 - when u double click on a song in the middle table, it should populate the playing list with those songs
 - do notifications
+- add an app icon
 
 # TODO
-- add an app icon
 - do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button
