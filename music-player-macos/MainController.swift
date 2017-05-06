@@ -210,6 +210,7 @@ class MainController: NSViewController {
     }
     
     private func updatePlayingSong(_ song: SongModel) {
+        showSongNotification(song)
         updateSongPromiseEl?.canceler()
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
         playingListViewEl.updateSpecialHighlightedCells(ids: [song.id])
@@ -267,6 +268,13 @@ class MainController: NSViewController {
         playerCoreEl.volume = volume
         playerEl.updateVolumeSlider(Double(volume))
         AppSingleton.shared.updateVolume(volume)
+    }
+    
+    private func showSongNotification(_ song: SongModel) {
+        let notification = NSUserNotification()
+        notification.title = song.name
+        notification.subtitle = GeneralHelpers.getAlbumArtist(album: song.album, artist: song.artist)
+        NSUserNotificationCenter.default.deliver(notification)
     }
     
     private func handleSliderChange(value: Double) {

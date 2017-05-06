@@ -11,11 +11,14 @@
 - fix the player cover
 - the app should remember the volume last status
 - when u double click on a song in the middle table, it should populate the playing list with those songs
+- do notifications
 
 # TODO
+- add an app icon
 - do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button
+- song clocks is corrupted at 10 secs
 - find music
 - the app should remember its last status whenever it launches:
   - save shuffle/repeat options
