@@ -219,7 +219,8 @@ class MainController: NSViewController {
         updateSongPromiseEl = playerCoreEl.updateSong(id: song.id)
         _ = updateSongPromiseEl?.promise.then(execute: { _ -> Void in
             let duration = CMTimeGetSeconds(self.playerCoreEl.currentItem!.duration)
-            self.playerEl.updateSongInfo(song: song, currentTime: 0, duration: duration)
+            self.playerEl.updateSlider(currentTime: 0, duration: duration)
+            self.playerEl.updateTimeLabels(currentTime: 0, duration: duration)
         })
     }
     

@@ -51,45 +51,20 @@ class ImageView: NSImageView {
     // MARK: - Life Cycles
 
     override func draw(_ dirtyRect: NSRect) {
-        frame.size = dirtyRect.size
-        setImageAsSizeCover()
+        if backgroundSize == .cover {
+            frame.size = dirtyRect.size
+            setImageAsSizeCover()
+        }
         super.draw(dirtyRect)
     }
     
     // MARK: - Private Methods
     
-    private func getRealImageSize(_ image: NSImage) -> NSSize {
-        var imageRealSize = image.size
-        
-        image.representations.forEach({ imageRep in
-            let pixelsWide = CGFloat(imageRep.pixelsWide)
-            let pixelsHigh = CGFloat(imageRep.pixelsHigh)
-            if pixelsWide > imageRealSize.width { imageRealSize.width = pixelsWide }
-            if pixelsHigh > imageRealSize.height { imageRealSize.height = pixelsHigh }
-        })
-        
-        return imageRealSize
-    }
-    
-    private func getImageSizeToCoverContainer(imageSize: NSSize, containerSize: NSSize) -> NSSize {
-        let imageAspectRatio = imageSize.width / imageSize.height
-        
-        var newImageWidth = containerSize.width
-        var newImageHeight = newImageWidth / imageAspectRatio
-        
-        if newImageHeight < containerSize.height {
-            newImageHeight = containerSize.height
-            newImageWidth = newImageHeight * imageAspectRatio
-        }
-        
-        return NSSize(width: newImageWidth, height: newImageHeight)
-    }
-    
     private func setImageAsSizeCover() {
         guard let image = image else { return }
         
-        let imageRealSize = getRealImageSize(image)
-        image.size = getImageSizeToCoverContainer(imageSize: imageRealSize, containerSize: frame.size)
+        let imageRealSize = GeneralHelpers.getRealImageSize(image)
+        image.size = GeneralHelpers.getImageSizeToCoverContainer(imageSize: imageRealSize, containerSize: frame.size)
         imageScaling = .scaleNone
         imageAlignment = .alignCenter
     }

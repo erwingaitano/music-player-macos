@@ -19,11 +19,7 @@ class PlayerCover: View {
     
     private lazy var imageViewEl: ImageView = {
         let v = ImageView()
-        v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#aaaaaa").cgColor
-        
-        self.coverGradientEl.colors = [NSColor.black.withAlphaComponent(0.9).cgColor, NSColor.black.withAlphaComponent(0.75).cgColor]
-        self.coverGradientEl.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
-        v.layer?.addSublayer(self.coverGradientEl)
+        v.backgroundSize = .none
         return v
     }()
     
@@ -31,6 +27,10 @@ class PlayerCover: View {
     
     override init() {
         super.init(frame: .zero)
+        coverGradientEl.colors = [NSColor.black.withAlphaComponent(0.9).cgColor, NSColor.black.withAlphaComponent(0.75).cgColor]
+        coverGradientEl.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+        layer?.backgroundColor = NSColor.hexStringToColor(hex: "#aaaaaa").cgColor
+        layer?.addSublayer(self.coverGradientEl)
         
         addSubview(imageViewEl)
         imageViewEl.allEdgeAnchorsToEqual(self)
@@ -48,16 +48,46 @@ class PlayerCover: View {
     
     private func changeCover(shouldRemoveCover: Bool = false) {
         if shouldRemoveCover {
-            self.imageViewEl.layer?.addSublayer(self.coverGradientEl)
             self.imageViewEl.image = nil
             return
         }
         
         if let image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(coverUrls[coverToRotateIdx])) {
-            coverGradientEl.removeFromSuperlayer()
             imageViewEl.image = image
-        } else {
-            imageViewEl.layer?.addSublayer(self.coverGradientEl)
+            
+            
+            var newImageViewSize = GeneralHelpers.getRealImageSize(image)
+            newImageViewSize = GeneralHelpers.getImageSizeToCoverContainer(imageSize: newImageViewSize, containerSize: frame.size)
+            imageViewEl.layer?.removeAllAnimations()
+            imageViewEl.frame.size = newImageViewSize
+            
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = 1
+            animation.toValue = 0.3
+            animation.duration = 3
+            animation.isRemovedOnCompletion = false
+            animation.fillMode = kCAFillModeForwards
+            imageViewEl.layer?.add(animation, forKey: "opacity")
+            
+            if newImageViewSize.width > frame.size.width {
+                let animation = CABasicAnimation(keyPath: "transform.translation.x")
+                animation.fromValue = 0
+                animation.toValue = frame.size.width - newImageViewSize.width
+                animation.duration = 3
+                animation.isRemovedOnCompletion = false
+                animation.fillMode = kCAFillModeForwards
+                imageViewEl.layer?.add(animation, forKey: "translateAnimation")
+            } else if newImageViewSize.height > frame.size.height {
+                let animation = CABasicAnimation(keyPath: "transform.translation.y")
+                animation.fromValue = 0
+                animation.toValue = frame.size.height - newImageViewSize.height
+                animation.duration = 3
+                animation.isRemovedOnCompletion = false
+                animation.fillMode = kCAFillModeForwards
+                imageViewEl.layer?.add(animation, forKey: "translateAnimation")
+            } else {
+                
+            }
         }
     }
     
@@ -82,6 +112,9 @@ class PlayerCover: View {
         
         if coversToRotate == 0 {
             changeCover(shouldRemoveCover: true)
+            return
+        } else if coversToRotate == 1 {
+            changeCover()
             return
         }
         
