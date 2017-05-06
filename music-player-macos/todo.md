@@ -10,6 +10,8 @@
   - save shuffle/repeat options
 
 # TODO
+- fix the player cover
+- the app should remember the volume last status
 - should load playlists/songs when launching app
 - should add a sync button
 - find music

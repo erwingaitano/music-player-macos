@@ -36,8 +36,8 @@ class MediaCell: View {
         return v
     }()
     
-    private var imageEl: NSImageView = {
-        let v = NSImageView()
+    private var imageEl: ImageView = {
+        let v = ImageView()
         v.wantsLayer = true
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#D8D8D8").cgColor
         return v

@@ -50,7 +50,6 @@ class GeneralHelpers {
     
     public static func getCoverUrl(_ url: String) -> String {
         return "\(AppSingleton.shared.mediaFolderPath)\(url)"
-//        return "\(AppSingleton.shared.mediaFolderPath)\(url)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
     }
     
     public static func getSongDirPathFromSongKeyname(_ keyname: String) -> String? {

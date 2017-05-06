@@ -16,9 +16,9 @@ class PlayerCover: View {
     private var coverToRotateIdx: Int!
     private let coverGradientEl = CAGradientLayer()
     private var coverRotationTimer: Timer?
-    private lazy var imageViewEl: NSImageView = {
-        let v = NSImageView()
-        v.wantsLayer = true
+    
+    private lazy var imageViewEl: ImageView = {
+        let v = ImageView()
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#aaaaaa").cgColor
         
         self.coverGradientEl.colors = [NSColor.black.withAlphaComponent(0.9).cgColor, NSColor.black.withAlphaComponent(0.75).cgColor]
@@ -54,9 +54,10 @@ class PlayerCover: View {
         }
         
         if let image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(coverUrls[coverToRotateIdx])) {
+            coverGradientEl.removeFromSuperlayer()
             imageViewEl.image = image
         } else {
-            self.imageViewEl.layer?.addSublayer(self.coverGradientEl)
+            imageViewEl.layer?.addSublayer(self.coverGradientEl)
         }
     }
     

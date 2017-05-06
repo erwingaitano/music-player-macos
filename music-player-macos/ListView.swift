@@ -132,7 +132,6 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        // TODO: this seems to not be working, it's always entering the if block
         var v = tableView.make(withIdentifier: "lul", owner: self) as? MediaCell
         
         if v == nil {
