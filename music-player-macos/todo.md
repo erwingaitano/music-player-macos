@@ -1,3 +1,25 @@
+
+# TODO
+- do the imageTransition
+- fix the sidebar items
+  - when u click on all songs/playlists it should only show and not play them
+- should load playlists/songs when launching app so that it doesnt depend on the server
+- should add a sync button
+- the app should remember its last status whenever it launches:
+  - playlist view
+- search for music/playlists
+- Lyrics
+- nice mode to show lyrics and covers
+
+# NICE TO HAVE
+- should slide title/subtitle in player if text too long to be shown
+- should be able to remove songs from the playlist
+- should be able to rearrange songs in the paylists
+- should be able to right click songs/playlists (even multiple selections) and add them to the current playing playlist
+- should be able to fast forward/backward songs when the respective key is being pressed!
+
+# DONE
+- song clocks is corrupted at 10 secs
 - better shuffle mechanism
   - when u shuffle, the song selected/playing should become first and the rest shuffled
     (not really, i prefer how it is now)
@@ -15,31 +37,6 @@
 - add an app icon
 - change app name to mmmmmmmmmmmmmmmm: Media Player
 - make the app icon a litle smaller
-
-# TODO
-- when u click on all songs/playlists it should only show and not play them
-- do the imageTransition
-- should load playlists/songs when launching app
-- should add a sync button
-- song clocks is corrupted at 10 secs
-- find music
-- the app should remember its last status whenever it launches:
-  - save shuffle/repeat options
-- the app should remember its last status whenever it launches:
-  - playlist view
-
-- fix the sidebar items
-- should be able to remove songs from the playlist
-- should be able to rearrange songs in the paylists
-- should be able to right click songs/playlists (even multiple selections) and add them to the current playing playlist
-- search for music/playlists
-- save music locally
-- pause sometimes not working (when you focus any table and try to pause a song with space it doesnt work anymore)
-- should be able to fast forward/backward songs when the respective key is being pressed!
-- support for lyrics
-- nice visualization for the covers like in itunes (even showing lyrics!)
-
-# DONE
 - volume slider
 - fix the slider styles
 - repeat playlist

@@ -11,7 +11,8 @@ import Cocoa
 class PlayerCoverCycler: View {
     // MARK: - Typealiases
 
-    typealias ChainAnimationItem = (view: ImageView, animation: CABasicAnimation, key: String, delay: CGFloat)
+    typealias AnimationItem = (animation: CABasicAnimation, key: String, delay: Double?)
+    typealias ChainAnimationItem = (view: ImageView, animations: [AnimationItem])
     
     // MARK: - Properties
 
@@ -36,8 +37,7 @@ class PlayerCoverCycler: View {
 
     public func startAnimations() {
         Swift.print("Rotating")
-        let item = items[items.count - 1]
-        let view = self.subviews[items.count - 1]
+        let view = subviews[items.count - 1]
 
         CATransaction.begin()
         CATransaction.setCompletionBlock {
@@ -54,9 +54,14 @@ class PlayerCoverCycler: View {
         
         // Force to keep last state of animation, it will be removed
         // in the completionBlock to avoid glitches
-        item.animation.isRemovedOnCompletion = false
-        item.animation.fillMode = kCAFillModeForwards
-        view.layer?.add(item.animation, forKey: item.key)
+        let item = items.first(where: { $0.view == view })!
+        item.animations.forEach { el in
+            el.animation.isRemovedOnCompletion = false
+            el.animation.fillMode = kCAFillModeForwards
+            if let delay = el.delay { el.animation.beginTime = CACurrentMediaTime() + delay }
+            view.layer?.add(el.animation, forKey: el.key)
+        }
+        
         CATransaction.commit()
     }
     

@@ -53,10 +53,11 @@ class PlayerCover: View {
                 image.size = newImageViewSize
             }
         } else {
-            var animations: [PlayerCoverCycler.ChainAnimationItem] = []
+            var chainAnimationsItems: [PlayerCoverCycler.ChainAnimationItem] = []
             
             coverUrls.enumerated().forEach({ (i, url) in
                 guard let image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(url)) else { return }
+                var animations: [PlayerCoverCycler.AnimationItem] = []
                 let v = ImageView()
                 v.backgroundSize = .none
                 v.imageScaling = .scaleNone
@@ -66,40 +67,31 @@ class PlayerCover: View {
                 newImageViewSize = GeneralHelpers.getImageSizeToCoverContainer(imageSize: newImageViewSize, containerSize: frame.size)
                 v.frame.size = newImageViewSize
                 image.size = newImageViewSize
-//                Swift.print(v.isOpaque)
-//                
-//                if newImageViewSize.width > frame.size.width {
-//                    let animation = CABasicAnimation(keyPath: "transform.translation.x")
-//                    animation.fromValue = 0
-//                    animation.toValue = frame.size.width - newImageViewSize.width
-//                    animation.duration = 2
-//                    animation.isRemovedOnCompletion = false
-//                    animation.fillMode = kCAFillModeForwards
-////                    v.layer?.add(animation, forKey: "translateAnimation")
-////                    animations.append((v.layer!, animation, "translateAnimationX", CGFloat(i * 2)))
-//                } else if newImageViewSize.height > frame.size.height {
-//                    let animation = CABasicAnimation(keyPath: "transform.translation.y")
-//                    animation.fromValue = 0
-//                    animation.toValue = frame.size.height - newImageViewSize.height
-//                    animation.duration = 2
-//                    animation.isRemovedOnCompletion = false
-//                    animation.fillMode = kCAFillModeForwards
-////                    v.layer?.add(animation, forKey: "translateAnimation")
-////                    animations.append((v.layer!, animation, "translateAnimationY", CGFloat(i * 2)))
-//                }
-                
+
+                if newImageViewSize.width > frame.size.width {
+                    let animation = CABasicAnimation(keyPath: "transform.translation.x")
+                    animation.fromValue = 0
+                    animation.toValue = frame.size.width - newImageViewSize.width
+                    animation.duration = 5
+                    animations.append((animation, "transform.translation.x", nil))
+                } else if newImageViewSize.height > frame.size.height {
+                    let animation = CABasicAnimation(keyPath: "transform.translation.y")
+                    animation.fromValue = 0
+                    animation.toValue = frame.size.height - newImageViewSize.height
+                    animation.duration = 5
+                    animations.append((animation, "transform.translation.y", nil))
+                }
                 
                 let animation = CABasicAnimation(keyPath: "opacity")
-//                let animation = CABasicAnimation(keyPath: "transform.translation.x")
                 animation.fromValue = 1
                 animation.toValue = 0
-                animation.duration = 2
+                animation.duration = 1
+                animations.append((animation, "opacity", 4))
                 
-                animations.append((v, animation, "opacity", CGFloat(i * 2 + 2)))
-                
+                chainAnimationsItems.append((v, animations))
             })
             
-            coverCyclerEl = PlayerCoverCycler(animations)
+            coverCyclerEl = PlayerCoverCycler(chainAnimationsItems)
             coverCyclerEl!.startAnimations()
             addSubview(coverCyclerEl!)
             coverCyclerEl!.allEdgeAnchorsToEqual(self)
