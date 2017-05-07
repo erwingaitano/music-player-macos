@@ -144,21 +144,9 @@ class ListView: View, NSTableViewDelegate, NSTableViewDataSource {
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        if let table = notification.object as? NSTableView {
-            let selected = table.selectedRowIndexes.map { Int($0) }
-            Swift.print(selected)
-        }
+//        if let table = notification.object as? NSTableView {
+//            let selected = table.selectedRowIndexes.map { Int($0) }
+//            Swift.print(selected)
+//        }
     }
-
-//    func tableView(_ tableView: NSTableView, didHighlightRowAt indexPath: IndexPath) {
-//        (tableView.cellForRow(at: indexPath) as! MediaCell).highlight()
-//    }
-//    
-//    func tableView(_ tableView: NSTableView, didUnhighlightRowAt indexPath: IndexPath) {
-//        (tableView.cellForRow(at: indexPath) as! MediaCell).highlight(false)
-//    }
-//    
-//    func tableView(_ tableView: NSTableView, didSelectRowAt indexPath: IndexPath) {
-//        onItemSelected?(data[indexPath.row])
-//    }
 }

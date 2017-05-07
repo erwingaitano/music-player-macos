@@ -17,6 +17,7 @@
 - make the app icon a litle smaller
 
 # TODO
+- when u click on all songs/playlists it should only show and not play them
 - do the imageTransition
 - should load playlists/songs when launching app
 - should add a sync button

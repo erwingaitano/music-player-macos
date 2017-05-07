@@ -34,6 +34,7 @@
 		AA9672781EB7DA03008CE884 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9672771EB7DA03008CE884 /* Sidebar.swift */; };
 		AA9672931EB907BD008CE884 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9672921EB907BD008CE884 /* Slider.swift */; };
 		AABFD1641EBD5A8500DCDFFD /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABFD1631EBD5A8500DCDFFD /* ImageView.swift */; };
+		AABFD1661EBEB23200DCDFFD /* PlayerCoverCycler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABFD1651EBEB23200DCDFFD /* PlayerCoverCycler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		AA9672771EB7DA03008CE884 /* Sidebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		AA9672921EB907BD008CE884 /* Slider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		AABFD1631EBD5A8500DCDFFD /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		AABFD1651EBEB23200DCDFFD /* PlayerCoverCycler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerCoverCycler.swift; sourceTree = "<group>"; };
 		BDAE1AD68CC44741F47E4DB6 /* Pods-music-player-macos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music-player-macos.debug.xcconfig"; path = "Pods/Target Support Files/Pods-music-player-macos/Pods-music-player-macos.debug.xcconfig"; sourceTree = "<group>"; };
 		C2A76408B6F3800C4B6A0559 /* Pods-music-player-macos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music-player-macos.release.xcconfig"; path = "Pods/Target Support Files/Pods-music-player-macos/Pods-music-player-macos.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,6 +151,7 @@
 				AA6D14911EB4175F005DBC83 /* Player.swift */,
 				AA6D14921EB4175F005DBC83 /* PlayerCore.swift */,
 				AA6D14931EB4175F005DBC83 /* PlayerCover.swift */,
+				AABFD1651EBEB23200DCDFFD /* PlayerCoverCycler.swift */,
 			);
 			name = Player;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA2FE7A31EB9951F00AAC56A /* AppDelegate.swift in Sources */,
+				AABFD1661EBEB23200DCDFFD /* PlayerCoverCycler.swift in Sources */,
 				AABFD1641EBD5A8500DCDFFD /* ImageView.swift in Sources */,
 				AA6D14AE1EB42CA0005DBC83 /* ListView.swift in Sources */,
 				AA6D14A31EB41760005DBC83 /* View.swift in Sources */,
