@@ -210,6 +210,12 @@ class MainController: NSViewController {
     }
     
     private func updatePlayingSong(_ song: SongModel) {
+        //        var song = song
+        //        song.allCovers = ["/_artists/Keane/_covers/1.jpg",
+        //            "/_artists/Keane/_covers/2.jpg",
+        //            "/_artists/Keane/_covers/3.jpg"
+        //        ]
+        
         showSongNotification(song)
         updateSongPromiseEl?.canceler()
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
@@ -329,17 +335,14 @@ class MainController: NSViewController {
         case .library:
             if id == "allsongs" {
                 showAllSongs()
-                playPlaylist(AppSingleton.shared.songs)
             }
         case .playlists:
             getPlaylistSongsPromiseEl?.canceler()
-            playPlaylist([])
             updateListViewWith(title: "Playlist Songs", songs: [])
             listViewEl.updateTitle("Playlist Songs")
             getPlaylistSongsPromiseEl = ApiEndpointsHelpers.getPlaylistSongs(id)
             _ = getPlaylistSongsPromiseEl!.promise.then(execute: { songs -> Void in
                 self.updateListViewWith(title: "Playlist Songs", songs: songs)
-                self.playPlaylist(songs)
             })
         }
     }
