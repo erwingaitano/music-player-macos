@@ -69,19 +69,19 @@ class ApiEndpointsHelpers {
     // MARK: - API Methods
     
     public static func getSongs() -> SongsPromiseEl {
-        let promiseEl = getJson(url: "/songs", forcedDelay: 2)
+        let promiseEl = getJson(url: "/songs")
         let promise = getSongPromise(promiseEl: promiseEl)
         return (promise, promiseEl.canceler)
     }
     
     public static func getPlaylistSongs(_ playlistId: String) -> SongsPromiseEl {
-        let promiseEl = getJson(url: "/playlists/\(playlistId)/songs", forcedDelay: 2)
+        let promiseEl = getJson(url: "/playlists/\(playlistId)/songs")
         let promise = getSongPromise(promiseEl: promiseEl)
         return (promise, promiseEl.canceler)
     }
     
     public static func getPlaylists() -> (promise: Promise<[PlaylistModel]>, canceler: () -> Void) {
-        let promiseEl = getJson(url: "/playlists", forcedDelay: 2)
+        let promiseEl = getJson(url: "/playlists")
         
         let promise = promiseEl.promise.then { response -> [PlaylistModel] in
             guard let playlists = response as? [Any] else { return [] }
