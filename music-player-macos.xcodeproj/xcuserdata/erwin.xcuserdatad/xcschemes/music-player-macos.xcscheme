@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AA6D147A1EB415EE005DBC83"
-               BuildableName = "music-player-macos.app"
+               BuildableName = "Media Player.app"
                BlueprintName = "music-player-macos"
                ReferencedContainer = "container:music-player-macos.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA6D147A1EB415EE005DBC83"
-            BuildableName = "music-player-macos.app"
+            BuildableName = "Media Player.app"
             BlueprintName = "music-player-macos"
             ReferencedContainer = "container:music-player-macos.xcodeproj">
          </BuildableReference>
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA6D147A1EB415EE005DBC83"
-            BuildableName = "music-player-macos.app"
+            BuildableName = "Media Player.app"
             BlueprintName = "music-player-macos"
             ReferencedContainer = "container:music-player-macos.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA6D147A1EB415EE005DBC83"
-            BuildableName = "music-player-macos.app"
+            BuildableName = "Media Player.app"
             BlueprintName = "music-player-macos"
             ReferencedContainer = "container:music-player-macos.xcodeproj">
          </BuildableReference>
