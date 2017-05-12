@@ -210,12 +210,6 @@ class MainController: NSViewController {
     }
     
     private func updatePlayingSong(_ song: SongModel) {
-        //        var song = song
-        //        song.allCovers = ["/_artists/Keane/_covers/1.jpg",
-        //            "/_artists/Keane/_covers/2.jpg",
-        //            "/_artists/Keane/_covers/3.jpg"
-        //        ]
-        
         showSongNotification(song)
         updateSongPromiseEl?.canceler()
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)

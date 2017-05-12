@@ -43,15 +43,6 @@ class PlayerCover: View {
 
         if coverUrls.count == 0 {
             return
-        } else if coverUrls.count == 1 {
-            addSubview(imageViewEl)
-            if let image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(coverUrls[0])) {
-                imageViewEl.image = image
-                var newImageViewSize = GeneralHelpers.getRealImageSize(image)
-                newImageViewSize = GeneralHelpers.getImageSizeToCoverContainer(imageSize: newImageViewSize, containerSize: frame.size)
-                imageViewEl.frame.size = newImageViewSize
-                image.size = newImageViewSize
-            }
         } else {
             var chainAnimationsItems: [PlayerCoverCycler.ChainAnimationItem] = []
             
@@ -72,21 +63,21 @@ class PlayerCover: View {
                     let animation = CABasicAnimation(keyPath: "transform.translation.x")
                     animation.fromValue = 0
                     animation.toValue = frame.size.width - newImageViewSize.width
-                    animation.duration = 5
-                    animations.append((animation, "transform.translation.x", nil))
+                    animation.duration = 15
+                    animations.append((animation, "transform.translation.x", 15))
                 } else if newImageViewSize.height > frame.size.height {
                     let animation = CABasicAnimation(keyPath: "transform.translation.y")
                     animation.fromValue = 0
                     animation.toValue = frame.size.height - newImageViewSize.height
-                    animation.duration = 5
-                    animations.append((animation, "transform.translation.y", nil))
+                    animation.duration = 15
+                    animations.append((animation, "transform.translation.y", 15))
                 }
                 
                 let animation = CABasicAnimation(keyPath: "opacity")
-                animation.fromValue = 1
-                animation.toValue = 0
-                animation.duration = 1
-                animations.append((animation, "opacity", 4))
+                animation.fromValue = 0
+                animation.toValue = 1
+                animation.duration = 2
+                animations.append((animation, "opacity", 15))
                 
                 chainAnimationsItems.append((v, animations))
             })
@@ -102,6 +93,11 @@ class PlayerCover: View {
     
     public func setCovers(_ coverUrls: [String]) {
         self.coverUrls = coverUrls
+        
+        if self.coverUrls.count == 1 {
+            self.coverUrls.append(self.coverUrls[0])
+        }
+        
         startAnimatingCover()
     }
 }

@@ -11,7 +11,7 @@ import Cocoa
 class PlayerCoverCycler: View {
     // MARK: - Typealiases
 
-    typealias AnimationItem = (animation: CABasicAnimation, key: String, delay: Double?)
+    typealias AnimationItem = (animation: CABasicAnimation, key: String, wholeDuration: Double)
     typealias ChainAnimationItem = (view: ImageView, animations: [AnimationItem])
     
     // MARK: - Properties
@@ -24,8 +24,9 @@ class PlayerCoverCycler: View {
     init(_ items: [ChainAnimationItem]) {
         super.init()
         self.items = items
-        self.items.enumerated().forEach { (i, item) in
-            self.addSubview(item.view, positioned: .below, relativeTo: nil)
+        self.items.forEach { item in
+            self.addSubview(item.view)
+            item.view.isHidden = true
         }
     }
     
@@ -36,31 +37,35 @@ class PlayerCoverCycler: View {
     // MARK: - API Methods
 
     public func startAnimations() {
-        Swift.print("Rotating")
-        let view = subviews[items.count - 1]
-
+        let view = subviews[0]
+        view.layer?.removeAllAnimations()
+        view.isHidden = true
+        addSubview(view, positioned: .above, relativeTo: nil)
+        
         CATransaction.begin()
         CATransaction.setCompletionBlock {
             if self.shouldCancelCompletionBlock {
                 CATransaction.setCompletionBlock(nil)
                 return
             }
-            // this will switch positions in the subviews
-            self.addSubview(view, positioned: .below, relativeTo: nil)
-            view.layer?.removeAllAnimations()
 
             self.startAnimations()
         }
         
-        // Force to keep last state of animation, it will be removed
-        // in the completionBlock to avoid glitches
         let item = items.first(where: { $0.view == view })!
+        var maxDuration: Double = 0
+        
         item.animations.forEach { el in
             el.animation.isRemovedOnCompletion = false
             el.animation.fillMode = kCAFillModeForwards
-            if let delay = el.delay { el.animation.beginTime = CACurrentMediaTime() + delay }
+            if el.wholeDuration > maxDuration { maxDuration = el.wholeDuration }
             view.layer?.add(el.animation, forKey: el.key)
         }
+        
+        let animationDurationEl = CABasicAnimation(keyPath: "lul")
+        animationDurationEl.duration = maxDuration
+        view.layer?.add(animationDurationEl, forKey: "lul")
+        view.isHidden = false
         
         CATransaction.commit()
     }
