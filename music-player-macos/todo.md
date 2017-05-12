@@ -1,10 +1,9 @@
 - fix the sidebar items
   - when u click on all songs/playlists it should only show and not play them
+- do the imageTransition
 
 # TODO
-- do the imageTransition
 - fix the sidebar items
-  - fix the sidebar so it uses a outlineView source tree
 - should load playlists/songs when launching app so that it doesnt depend on the server
 - should add a sync button
 - the app should remember its last status whenever it launches:

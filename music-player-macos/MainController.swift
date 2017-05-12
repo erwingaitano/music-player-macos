@@ -15,6 +15,7 @@ class MainController: NSViewController {
     private var listViewEl: ListView!
     private var playingListViewEl: ListView!
     private var playerEl: Player!
+    private var slideShowEl = Slideshower()
     private var nonShuffledSongsPlaying: [SongModel] = []
     private var observers: [NSObjectProtocol] = []
     private var updateSongPromiseEl: ApiEndpointsHelpers.PromiseEl?
@@ -189,7 +190,6 @@ class MainController: NSViewController {
     private func playPlaylistSong(id: String, shouldStartPlaying: Bool) {
         let idx = AppSingleton.shared.songsPlaying.index(where: { $0.id == id })!
         
-        AppSingleton.shared.updateCurrentSong(id)
         updatePlayingSong(AppSingleton.shared.songsPlaying[idx])
         if shouldStartPlaying { playerCoreEl.play() }
         else { playerCoreEl.pause() }
@@ -210,8 +210,10 @@ class MainController: NSViewController {
     }
     
     private func updatePlayingSong(_ song: SongModel) {
+        AppSingleton.shared.updateCurrentSong(song.id)
         showSongNotification(song)
         updateSongPromiseEl?.canceler()
+        slideShowEl.startShow(song.allCovers)
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
         playingListViewEl.updateSpecialHighlightedCells(ids: [song.id])
         listViewEl.updateSpecialHighlightedCells(ids: [song.id])
@@ -284,6 +286,7 @@ class MainController: NSViewController {
     private func handleProgress(currentTime: Double, duration: Double) {
         playerEl.updateTimeLabels(currentTime: currentTime, duration: duration)
         playerEl.updateSlider(currentTime: currentTime, duration: duration)
+        slideShowEl.syncSubtitles(withCurrentTime: currentTime)
     }
     
     private func handleSongStartedPlaying() {
@@ -347,6 +350,9 @@ class MainController: NSViewController {
     
     private func handleRepeatBtnClick() {
         toggleRepeat()
+        AppDelegate.slideshowWindowControllerEl.showWindow(self)
+        AppDelegate.slideshowWindowEl.contentView!.addSubview(slideShowEl)
+        slideShowEl.allEdgeAnchorsToEqual(AppDelegate.slideshowWindowEl.contentView!)
     }
     
     private func handleShuffleBtnClick() {

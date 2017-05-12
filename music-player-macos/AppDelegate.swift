@@ -14,6 +14,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
     
+    public static var slideshowWindowControllerEl: NSWindowController = {
+        return NSWindowController(window: slideshowWindowEl)
+    }()
+    
+    public static var slideshowWindowEl: NSWindow = {
+        let v = NSWindow()
+        v.setFrame(NSMakeRect(0, 0, 600, 600), display: true)
+        v.contentMinSize = NSSize(width: 600, height: 600)
+        v.titlebarAppearsTransparent = true
+        v.center()
+        v.styleMask.insert([.closable, .resizable, .miniaturizable, .fullSizeContentView])
+        v.makeKeyAndOrderFront(nil)
+        return v
+    }()
+    
     private var mainMenu: NSMenu = {
         let mainMenu = NSMenu() // `title` really doesn't matter.
         let mainAppMenuItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")

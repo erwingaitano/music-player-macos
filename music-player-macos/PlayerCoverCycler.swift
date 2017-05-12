@@ -17,17 +17,59 @@ class PlayerCoverCycler: View {
     // MARK: - Properties
 
     private var shouldCancelCompletionBlock = false
-    private var items: [ChainAnimationItem]!
+    private var items: [ChainAnimationItem] = []
     
     // MARK: - Inits
 
-    init(_ items: [ChainAnimationItem]) {
+    init(_ coverUrls: [String], containerSize: CGSize) {
         super.init()
-        self.items = items
-        self.items.forEach { item in
-            self.addSubview(item.view)
-            item.view.isHidden = true
-        }
+
+        coverUrls.forEach({ url in
+            guard let image = NSImage(byReferencingFile: GeneralHelpers.getCoverUrl(url)) else { return }
+            var animations: [AnimationItem] = []
+            let v = ImageView()
+            v.backgroundSize = .none
+            v.imageScaling = .scaleNone
+            v.image = image
+            v.isHidden = true
+            v.layer?.backgroundColor = NSColor.red.cgColor
+            self.addSubview(v)
+            
+            var newImageViewSize = GeneralHelpers.getRealImageSize(image)
+            newImageViewSize = GeneralHelpers.getImageSizeToCoverContainer(imageSize: newImageViewSize, containerSize: containerSize)
+            v.frame.size = newImageViewSize
+            image.size = newImageViewSize
+            
+            if newImageViewSize.width > containerSize.width {
+                let animation = CABasicAnimation(keyPath: "transform.translation.x")
+                animation.fromValue = 0
+                animation.toValue = containerSize.width - newImageViewSize.width
+                animation.duration = 15
+                if coverUrls.count == 1 {
+                    animation.repeatCount = Float.infinity
+                    animation.autoreverses = true
+                }
+                animations.append((animation, "transform.translation.x", 15))
+            } else if newImageViewSize.height > containerSize.height {
+                let animation = CABasicAnimation(keyPath: "transform.translation.y")
+                animation.fromValue = 0
+                animation.toValue = containerSize.height - newImageViewSize.height
+                animation.duration = 15
+                if coverUrls.count == 1 {
+                    animation.repeatCount = Float.infinity
+                    animation.autoreverses = true
+                }
+                animations.append((animation, "transform.translation.y", 15))
+            }
+            
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = 0
+            animation.toValue = 1
+            animation.duration = 2
+            animations.append((animation, "opacity", 15))
+            
+            items.append((v, animations))
+        })
     }
     
     required init?(coder: NSCoder) {
@@ -44,7 +86,9 @@ class PlayerCoverCycler: View {
         
         CATransaction.begin()
         CATransaction.setCompletionBlock {
-            if self.shouldCancelCompletionBlock {
+            // self.items.count == 1 check to prevent infinite loop because it will always trigger
+            // this immediately if only one view to animate
+            if self.shouldCancelCompletionBlock || self.items.count == 1 {
                 CATransaction.setCompletionBlock(nil)
                 return
             }

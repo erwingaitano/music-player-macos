@@ -10,6 +10,7 @@
 		7F362D55E1AC745CDD64944C /* Pods_music_player_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CF8BE9A0F5F244268306200 /* Pods_music_player_macos.framework */; };
 		AA2FE7A31EB9951F00AAC56A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FE7A21EB9951F00AAC56A /* AppDelegate.swift */; };
 		AA2FE7A51EB9959400AAC56A /* Application.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2FE7A41EB9959400AAC56A /* Application.xib */; };
+		AA31B16D1EC580DA005C5DE7 /* Slideshower.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31B16C1EC580DA005C5DE7 /* Slideshower.swift */; };
 		AA45EF131EB94F74006635B3 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA45EF121EB94F74006635B3 /* ImageExtensions.swift */; };
 		AA6D14811EB415EE005DBC83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6D14801EB415EE005DBC83 /* Assets.xcassets */; };
 		AA6D14981EB4175F005DBC83 /* ApiEndpointsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6D148B1EB4175F005DBC83 /* ApiEndpointsHelpers.swift */; };
@@ -41,6 +42,7 @@
 		9CF8BE9A0F5F244268306200 /* Pods_music_player_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_music_player_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA2FE7A21EB9951F00AAC56A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA2FE7A41EB9959400AAC56A /* Application.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Application.xib; sourceTree = "<group>"; };
+		AA31B16C1EC580DA005C5DE7 /* Slideshower.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Slideshower.swift; sourceTree = "<group>"; };
 		AA45EF121EB94F74006635B3 /* ImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
 		AA6D147B1EB415EE005DBC83 /* Media Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Media Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA6D14801EB415EE005DBC83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				AA9672771EB7DA03008CE884 /* Sidebar.swift */,
 				AA9672921EB907BD008CE884 /* Slider.swift */,
 				AABFD1631EBD5A8500DCDFFD /* ImageView.swift */,
+				AA31B16C1EC580DA005C5DE7 /* Slideshower.swift */,
 			);
 			name = _components;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA2FE7A31EB9951F00AAC56A /* AppDelegate.swift in Sources */,
+				AA31B16D1EC580DA005C5DE7 /* Slideshower.swift in Sources */,
 				AABFD1661EBEB23200DCDFFD /* PlayerCoverCycler.swift in Sources */,
 				AABFD1641EBD5A8500DCDFFD /* ImageView.swift in Sources */,
 				AA6D14AE1EB42CA0005DBC83 /* ListView.swift in Sources */,
