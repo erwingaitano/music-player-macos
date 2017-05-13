@@ -214,6 +214,7 @@ class MainController: NSViewController {
         showSongNotification(song)
         updateSongPromiseEl?.canceler()
         slideShowEl.startShow(song.allCovers)
+        slideShowEl.updateSubtitles(song)
         playerEl.updateSongInfo(song: song, currentTime: nil, duration: nil)
         playingListViewEl.updateSpecialHighlightedCells(ids: [song.id])
         listViewEl.updateSpecialHighlightedCells(ids: [song.id])

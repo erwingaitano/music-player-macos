@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Dollar.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Kingfisher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,7 +32,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>6843FFDF3396AE7E24A570A794854F8A</key>
+		<key>03B850487880CD1C563A77B4A0DD448F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4B865EA7C91D438D9373E9DC79A1BE30</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -37,12 +47,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD06E6043D76AF60B68D60D0BDA53196</key>
+		<key>977004231D12E8D7F7A0AB6346D27331</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C05620608B5A70BB53FA0C04162342AA</key>
+		<key>BD06E6043D76AF60B68D60D0BDA53196</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -10,4 +10,5 @@ target 'music-player-macos' do
   pod 'PromiseKit/Alamofire', '~> 4.0'
   pod "PromiseKit", "~> 4.0"
   pod 'Kingfisher', '~> 3.0'
+  pod 'Dollar', '~> 6.2'
 end

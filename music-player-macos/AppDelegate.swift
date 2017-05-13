@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public static var slideshowWindowEl: NSWindow = {
         let v = NSWindow()
-        v.setFrame(NSMakeRect(0, 0, 600, 600), display: true)
+        v.setFrame(NSMakeRect(0, 0, 1140, 700), display: true)
         v.contentMinSize = NSSize(width: 600, height: 600)
         v.titlebarAppearsTransparent = true
         v.center()

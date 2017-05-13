@@ -1,32 +1,35 @@
 PODS:
-  - Alamofire (4.3.0)
-  - Kingfisher (3.5.0)
-  - PromiseKit (4.1.7):
-    - PromiseKit/Foundation (= 4.1.7)
-    - PromiseKit/QuartzCore (= 4.1.7)
-    - PromiseKit/UIKit (= 4.1.7)
-  - PromiseKit/Alamofire (4.1.7):
+  - Alamofire (4.4.0)
+  - Dollar (6.2.0)
+  - Kingfisher (3.9.1)
+  - PromiseKit (4.2.0):
+    - PromiseKit/Foundation (= 4.2.0)
+    - PromiseKit/QuartzCore (= 4.2.0)
+    - PromiseKit/UIKit (= 4.2.0)
+  - PromiseKit/Alamofire (4.2.0):
     - Alamofire (~> 4.0)
     - PromiseKit/CorePromise
-  - PromiseKit/CorePromise (4.1.7)
-  - PromiseKit/Foundation (4.1.7):
+  - PromiseKit/CorePromise (4.2.0)
+  - PromiseKit/Foundation (4.2.0):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.1.7):
+  - PromiseKit/QuartzCore (4.2.0):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.1.7):
+  - PromiseKit/UIKit (4.2.0):
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
   - Alamofire (~> 4.3)
+  - Dollar (~> 6.2)
   - Kingfisher (~> 3.0)
   - PromiseKit (~> 4.0)
   - PromiseKit/Alamofire (~> 4.0)
 
 SPEC CHECKSUMS:
-  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
-  Kingfisher: 7c62087039d93d26c54c8dd9b0b588d2ce55cef6
-  PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Dollar: da81aacae30cf7dd059bfdfec709e97f2f0ae2f8
+  Kingfisher: 6729a0baaa458245bfb8cd5a1296c71c10d6eb6c
+  PromiseKit: 08dfb783c161ddcd95b7912421f14c5113fd8318
 
-PODFILE CHECKSUM: 61d32c19bb5031c62b9b1c838ff897d9251961c2
+PODFILE CHECKSUM: cdb846a051fb10b39f20caedfc43a781623d3d55
 
 COCOAPODS: 1.2.0
