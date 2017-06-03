@@ -106,6 +106,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let minHeight: CGFloat = 600
         NSApplication.shared().mainMenu = mainMenu
         
+        window.setIsVisible(false)
         window.setFrame(NSMakeRect(0, 0, minWidth, minHeight), display: true)
         window.isOpaque = false
         window.isMovable = true

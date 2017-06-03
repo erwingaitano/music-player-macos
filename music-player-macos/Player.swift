@@ -24,6 +24,7 @@ class Player: View {
     public var onVolumeSliderChange: OnVolumeSliderChange?
     public var onShuffleBtnClick: EmptyCallback?
     public var onRepeatBtnClick: EmptyCallback?
+    public var onCoverClick: EmptyCallback?
     private static var shuffleImage = #imageLiteral(resourceName: "icon - shuffle")
     private static var shuffleImageActive = shuffleImage.imageWithTintColor(tintColor: .secondaryColor)
     private static var repeatImage = #imageLiteral(resourceName: "icon - repeat")
@@ -152,6 +153,8 @@ class Player: View {
         let v = View()
         v.layer?.backgroundColor = NSColor.hexStringToColor(hex: "#222222").cgColor
         
+        self.infoSectionImgEl.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(self.handleCoverClick)))
+        
         v.addSubview(self.shuffleBtnEl)
         self.shuffleBtnEl.topAnchorToEqual(v.topAnchor, constant: 10)
         self.shuffleBtnEl.rightAnchorToEqual(v.rightAnchor, constant: -10)
@@ -274,6 +277,10 @@ class Player: View {
     
     @objc private func handleShuffleBtnClick() {
         onShuffleBtnClick?()
+    }
+    
+    @objc private func handleCoverClick() {
+        onCoverClick?()
     }
     
     // MARK: - API Methods

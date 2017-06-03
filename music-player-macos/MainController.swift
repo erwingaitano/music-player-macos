@@ -83,6 +83,7 @@ class MainController: NSViewController {
         playerEl.updateVolumeSlider(Double(AppSingleton.shared.volume))
         playerEl.onRepeatBtnClick = handleRepeatBtnClick
         playerEl.onShuffleBtnClick = handleShuffleBtnClick
+        playerEl.onCoverClick = openSlideshow
         playerEl.updateRepeatBtnStatus(isActive: AppSingleton.shared.shouldRepeatPlayingSongs)
         playerEl.updateShuffleBtnStatus(isActive: AppSingleton.shared.shouldShuffleSongs)
         
@@ -280,6 +281,12 @@ class MainController: NSViewController {
         NSUserNotificationCenter.default.deliver(notification)
     }
     
+    private func openSlideshow() {
+        AppDelegate.slideshowWindowControllerEl.showWindow(self)
+        AppDelegate.slideshowWindowEl.contentView!.addSubview(slideShowEl)
+        slideShowEl.allEdgeAnchorsToEqual(AppDelegate.slideshowWindowEl.contentView!)
+    }
+    
     private func handleSliderChange(value: Double) {
         playerCoreEl.setTime(time: value)
     }
@@ -351,9 +358,6 @@ class MainController: NSViewController {
     
     private func handleRepeatBtnClick() {
         toggleRepeat()
-        AppDelegate.slideshowWindowControllerEl.showWindow(self)
-        AppDelegate.slideshowWindowEl.contentView!.addSubview(slideShowEl)
-        slideShowEl.allEdgeAnchorsToEqual(AppDelegate.slideshowWindowEl.contentView!)
     }
     
     private func handleShuffleBtnClick() {
