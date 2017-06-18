@@ -69,7 +69,7 @@ class GeneralHelpers {
         guard let song = AppSingleton.shared.songs.first(where: { $0.id == id }) else { return nil }
         guard let songExtension = song.ext else { return nil }
         guard let songDirPath = getSongDirPathFromSongKeyname(song.keyname) else { return nil }
-        return URL(fileURLWithPath: "\(songDirPath)/file\(songExtension)")
+        return URL(fileURLWithPath: "\(songDirPath)/_file\(songExtension)")
     }
     
     public static func getRealImageSize(_ image: NSImage) -> NSSize {
